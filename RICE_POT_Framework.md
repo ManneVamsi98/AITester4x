@@ -52,4 +52,4 @@ covering:
 | **E**xpected | What's success? | 10 test cases, no gaps |
 | **P**arameters | What are the rules? | No assumptions, cite sources |
 | **O**utput | What format? | Table with 5 columns |
-| **T**ask | What exactly to do? | Generate test cases |
+| **T**ask | What exactly to do? | Generate test cases |.
