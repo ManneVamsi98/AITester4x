@@ -7,7 +7,8 @@
       "Shell(powershell -Command \"Expand-Archive -Path 'C:\\Users\\DELL\\AppData\\Local\\Temp\\commandcode\\maven.zip' -DestinationPath 'C:\\Users\\DELL\\AppData\\Local\\Temp\\commandcode\\maven-dir' -Force\")",
       "Shell(C:UsersDELLAppDataLocalTempcommandcodemaven-dirapache-maven-3.9.6binmvn.cmd:*)",
       "Shell(git:*)",
-      "Shell(git commit -F - <<'EOF' Add Chapter 1 & 2 course content with Salesforce login Selenium project Co-authored-by: CommandCodeBot <noreply@commandcode.ai> EOF)"
+      "Shell(git commit -F - <<'EOF' Add Chapter 1 & 2 course content with Salesforce login Selenium project Co-authored-by: CommandCodeBot <noreply@commandcode.ai> EOF)",
+      "Shell(git commit -F - <<'EOF' chore(commands): rename /go slash command to /gotopush Make the command's purpose explicit rather than terse. Co-authored-by: CommandCodeBot <noreply@commandcode.ai> EOF)"
     ],
     "deny": [],
     "defaultMode": "default"
