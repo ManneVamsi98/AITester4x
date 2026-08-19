@@ -1,0 +1,7 @@
+# Credentials and local state - never commit these.
+config.json
+.env
+
+# Python
+__pycache__/
+*.pyc
