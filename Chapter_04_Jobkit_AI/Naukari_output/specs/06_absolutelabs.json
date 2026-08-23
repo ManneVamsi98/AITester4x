@@ -1,0 +1,106 @@
+{
+  "output": "E:/AI Tester 4x/AI Tester 4x/Chapter_04_Jobkit_AI/Naukari_output/Manne_Vamsi_QA_Manual_Test_Engineer_Absolutelabs.docx",
+  "docTitle": "Manne Vamsi — QA Manual Test Engineer — Absolutelabs",
+  "name": "MANNE VAMSI",
+  "title": "==QA MANUAL TEST ENGINEER — FUNCTIONAL · API · SQL VALIDATION==",
+  "contact": [
+    ["Hyderabad, India", "+91 8253456856", "mannevamsi98@gmail.com"],
+    ["Open to Hyderabad (Hybrid)", "Notice Period: [X]"]
+  ],
+  "margin": 0.45,
+  "sections": [
+    {
+      "heading": "SUMMARY",
+      "body": "==Manual / Functional Test Engineer== with 6+ years of hands-on experience ==analysing business and functional requirements to design comprehensive test scenarios, test cases and test plans==. ==Executes functional, regression, smoke, sanity, integration, system and UAT== across web and enterprise applications, and performs ==exploratory testing== to uncover edge cases. ==Validates REST APIs and backend responses using Postman== and performs ==basic backend and data validation using SQL==. ==Logs, tracks and manages defects through their full lifecycle in Jira== and Azure DevOps, ==maintains the Requirement Traceability Matrix (RTM)==, and ==participates actively in Agile/Scrum ceremonies==. Strong attention to detail, analytical thinking and defect-reporting clarity with excellent cross-functional communication."
+    },
+    {
+      "heading": "CORE SKILLS",
+      "rows": [
+        ["==Manual & Functional Testing==", "==Test Scenario / Test Case / Test Plan design== · Functional · Regression · Smoke · Sanity · Integration · System · Exploratory · ==UAT=="],
+        ["==API Testing==", "==Postman (request construction, response/status validation, assertions)== · REST Assured"],
+        ["==Backend & Data Validation==", "==SQL queries against relational databases== · ==basic backend validation=="],
+        ["==Defect & Test Management==", "==Jira== · Azure DevOps · TestRail (familiarity) · Zephyr (familiarity) · Rally"],
+        ["==Traceability==", "==Requirement Traceability Matrix (RTM)== · ==test coverage tracking=="],
+        ["==Compatibility==", "==Cross-browser & cross-device testing=="],
+        ["Automation (adjacent)", "Selenium WebDriver · TestNG · BrowserStack LCNC · ACCELQ"],
+        ["Methodologies", "==STLC== · ==SDLC== · ==Agile/Scrum (sprint planning, stand-ups, retrospectives)=="]
+      ],
+      "note": "FILL-IN — strong overall fit for this role. Fill [X] notice period in the header. Everything else is supported by the resume; replace any 'familiarity' labels with hands-on only if you genuinely used those tools."
+    },
+    {
+      "heading": "PROFESSIONAL EXPERIENCE",
+      "roles": [
+        {
+          "title": "Quality Specialist ==(QA Manual Test Engineer / SME)==",
+          "org": "Uniquode Applications Specialists LLP",
+          "meta": "Apr 2024 – Present  |  Hyderabad, India  |  SaaS · AWS Marketplace · CRM",
+          "bullets": [
+            "==Analysed business and functional requirements== to ==design comprehensive test scenarios, test cases and test plans== for the SaaSify commerce platform.",
+            "==Executed functional, regression, smoke, sanity, integration, system and UAT== across web and enterprise applications.",
+            "==Performed exploratory testing== to uncover edge cases and usability issues beyond scripted coverage.",
+            "==Logged, tracked and managed defects== through their full lifecycle — identification, triage, retesting and closure — using ==Jira== and Azure DevOps.",
+            "==Validated REST APIs and backend responses using Postman==, including request/response and status-code checks, and ==performed SQL-based backend and data validation==.",
+            "==Maintained the Requirement Traceability Matrix (RTM)== to ensure full test coverage across releases.",
+            "==Conducted cross-browser and cross-device compatibility testing== and ==supported UAT cycles and production release validation== with business stakeholders.",
+            "==Participated actively in Agile/Scrum ceremonies== — sprint planning, stand-ups, retrospectives — providing QA input during grooming."
+          ]
+        },
+        {
+          "title": "Tester",
+          "org": "Prohuman Technology Pvt. Ltd.",
+          "meta": "Aug 2023 – Mar 2024  |  Hyderabad, India  |  Customer Service · Web Application",
+          "bullets": [
+            "==Analysed requirements and designed test scenarios, test cases and test plans== for the Ezcom2 Agent Portal.",
+            "==Executed functional, regression, smoke, sanity, integration, exploratory, API and security testing==.",
+            "==Validated REST APIs and backend responses using Postman== and ==performed SQL-based data validation==.",
+            "==Logged and tracked defects through their lifecycle== using ==Jira== and Azure DevOps; ==prepared test documentation== including test plans, test cases and defect reports.",
+            "==Participated in Agile/Scrum ceremonies== within an 8-member team and supported release validation."
+          ]
+        },
+        {
+          "title": "Software Engineer",
+          "org": "Allvy Software Solutions Pvt. Ltd.",
+          "meta": "Jan 2022 – Apr 2023  |  Andhra Pradesh, India  |  Government Portal",
+          "bullets": [
+            "==Designed test scenarios, test cases and test data== based on functional requirements.",
+            "==Executed functional, regression, integration, system, API and security testing==.",
+            "==Performed SQL-based backend and data validation== across portal modules; logged and tracked defects to closure."
+          ]
+        },
+        {
+          "title": "Software Engineer",
+          "org": "QTesters",
+          "meta": "Feb 2020 – Jan 2022  |  Hyderabad, India  |  Web · Mobile · E-commerce · Blockchain",
+          "bullets": [
+            "==Prepared test cases, test scenarios and test data== for multiple client projects.",
+            "==Executed REST API testing using Postman and REST Assured==, ==validating request/response and status codes==",
+            "==Performed cross-browser, cross-device and mobile compatibility testing==; ==logged and tracked defects in Jira==."
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "EDUCATION",
+      "rows": [["B. Tech, Electronics and Communication Engineering", "Narayan Engineering College (JNTUA) · 2019"]]
+    },
+    {
+      "heading": "CERTIFICATIONS",
+      "bullets": [
+        "Learn Generative AI in Software Testing — Udemy",
+        "SQL (Basic) — HackerRank",
+        "Selenium WebDriver with Java — Udemy",
+        "ACCELQ Automation Engineer & Certified ACCELQ Automation Expert — ACCELQ",
+        "Katalon Practitioner & Professional Level — Katalon"
+      ]
+    },
+    {
+      "heading": "STRENGTHS",
+      "bullets": [
+        "Excellent attention to detail & analytical thinking",
+        "Defect-reporting clarity & strong documentation",
+        "Cross-functional collaboration with developers, BAs & product owners",
+        "Process & continuous-improvement mindset"
+      ]
+    }
+  ]
+}

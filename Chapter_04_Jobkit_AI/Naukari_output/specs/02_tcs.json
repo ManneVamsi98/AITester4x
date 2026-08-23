@@ -1,0 +1,103 @@
+{
+  "output": "E:/AI Tester 4x/AI Tester 4x/Chapter_04_Jobkit_AI/Naukari_output/Manne_Vamsi_QA_Engineer_Tata_Consultancy_Services.docx",
+  "docTitle": "Manne Vamsi — QA Engineer (Amazon Connect) — Tata Consultancy Services",
+  "name": "MANNE VAMSI",
+  "title": "==QA ENGINEER — AMAZON CONNECT & CLOUD CONTACT CENTER==",
+  "contact": [
+    ["Hyderabad, India", "+91 8253456856", "mannevamsi98@gmail.com"],
+    ["Open to relocation — Pan India", "Notice Period: [X]"]
+  ],
+  "margin": 0.45,
+  "sections": [
+    {
+      "heading": "SUMMARY",
+      "body": "==Test Analyst / QA Engineer== with 6+ years of experience ==planning, designing, executing and automating test scenarios== across functional, integration, system, regression and end-to-end suites for enterprise web applications and integrations. ==Strong background validating customer journeys, agent workflows, CRM integrations, API and event-driven data flows== across AWS Marketplace, Salesforce, HubSpot and SaaS commerce platforms. Automated 270+ regression test cases (BrowserStack LCNC, ACCELQ), performed defect tracking, triage, retesting and closure, and supported UAT planning, release validation and production deployments. ==Experienced in API testing (Postman, REST Assured), SQL data validation, CI/CD pipelines (Azure DevOps) and cross-functional collaboration with BAs, architects, developers and operations==."
+    },
+    {
+      "heading": "CORE SKILLS",
+      "rows": [
+        ["==Core Testing==", "==Test Strategy & Test Planning== · ==Test Case Design== · Functional · Integration · System · Regression · ==End-to-End== · UAT · ==Defect Management=="],
+        ["==Contact Center & CX (target domain)==", "==[Amazon Connect — see note]== · [IVR / Contact Flows] · [Amazon Lex] · [Agent Workspace] · [Contact Lens]"],
+        ["==AWS & Integrations==", "==AWS Marketplace workflows== · Salesforce · HubSpot · ==[AWS Lambda / API Gateway / DynamoDB / SQS / EventBridge — see note]=="],
+        ["Automation Tools", "==[Cyara]== · ==[Hammer]== · BrowserStack LCNC · ACCELQ · Selenium WebDriver · TestNG"],
+        ["API Testing", "Postman · REST Assured"],
+        ["Tools", "Jira · Azure DevOps · Confluence · Rally"],
+        ["CI/CD", "Azure DevOps Pipelines"]
+      ],
+      "note": "FILL-IN — the JD mandates Cyara and Hammer. Both are [placeholders]: list them only if you have real exposure; otherwise the role is a stretch and needs a cover note naming the gap. Same for Amazon Connect itself — describe any contact-centre/IVR or AWS service you actually validated, or delete the rows."
+    },
+    {
+      "heading": "PROFESSIONAL EXPERIENCE",
+      "roles": [
+        {
+          "title": "Quality Specialist ==(QA Test Analyst / SME)==",
+          "org": "Uniquode Applications Specialists LLP",
+          "meta": "Apr 2024 – Present  |  Hyderabad, India  |  SaaS · AWS Marketplace · CRM",
+          "bullets": [
+            "==Planned, designed, executed and automated test scenarios== across functional, integration, system, regression, security and end-to-end suites for the SaaSify commerce platform.",
+            "==Validated customer journeys, agent-facing workflows, subscription lifecycle and entitlements== across AWS Marketplace, Salesforce and HubSpot integrations — directly adjacent to contact-centre customer-experience and CRM integration testing.",
+            "==Tested integrations with AWS Marketplace (Lambda-driven), API Gateway, and CRM systems==, ==verifying data flow, event processing and error-handling scenarios==.",
+            "==Performed defect tracking, triage, retesting and closure== using Azure DevOps and Jira; maintained requirement traceability across releases.",
+            "==Supported UAT planning and production deployments==, conducting walkthroughs with AWS Partner customers and ensuring quality standards before go-live.",
+            "==Developed and maintained automated test suites== (BrowserStack LCNC, ACCELQ) covering 270+ regression cases, and ==executed automation for regression and integration testing==",
+            "==Collaborated with BAs, architects, developers and operations== in sprint planning, code reviews and design reviews to resolve quality issues."
+          ]
+        },
+        {
+          "title": "Tester",
+          "org": "Prohuman Technology Pvt. Ltd.",
+          "meta": "Aug 2023 – Mar 2024  |  Hyderabad, India  |  Customer Service · Web Application",
+          "bullets": [
+            "==Designed and executed functional, integration, system, regression and end-to-end test cases== for the Ezcom2 Agent Portal — a customer-support agent application.",
+            "==Validated agent experiences and customer journeys== across account management, service requests and support workflows.",
+            "==Performed API validation== (Postman) and ==backend data-flow validation==, verifying request/response payloads and error handling.",
+            "==Supported UAT planning and execution== and release validation for an 8-member Agile team; tracked and closed defects in Jira and Azure DevOps."
+          ]
+        },
+        {
+          "title": "Software Engineer",
+          "org": "Allvy Software Solutions Pvt. Ltd.",
+          "meta": "Jan 2022 – Apr 2023  |  Andhra Pradesh, India  |  Government Portal",
+          "bullets": [
+            "Designed and executed functional, regression, integration, system, API and security test cases for a government portal.",
+            "==Validated event-driven workflows and data processing==, performing SQL-based data validation across portal modules.",
+            "Executed automated suites and analysed test results; logged and tracked defects for closure."
+          ]
+        },
+        {
+          "title": "Software Engineer",
+          "org": "QTesters",
+          "meta": "Feb 2020 – Jan 2022  |  Hyderabad, India  |  Web · Mobile · E-commerce · Blockchain",
+          "bullets": [
+            "Performed end-to-end testing of web, mobile, e-commerce and blockchain applications across multiple client projects.",
+            "Executed REST API testing using REST Assured and Postman; performed cross-browser and cross-device compatibility testing.",
+            "Reported and tracked defects using Jira, collaborating closely with development teams for closure."
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "EDUCATION",
+      "rows": [["B. Tech, Electronics and Communication Engineering", "Narayan Engineering College (JNTUA) · 2019"]]
+    },
+    {
+      "heading": "CERTIFICATIONS",
+      "bullets": [
+        "Selenium WebDriver with Java — Udemy",
+        "Learn Generative AI in Software Testing — Udemy",
+        "SQL (Basic) — HackerRank",
+        "ACCELQ Automation Engineer & Certified ACCELQ Automation Expert — ACCELQ",
+        "Katalon Practitioner & Professional Level — Katalon"
+      ]
+    },
+    {
+      "heading": "STRENGTHS",
+      "bullets": [
+        "Strong analytical and problem-solving skills",
+        "Attention to detail & requirement traceability",
+        "Cross-functional collaboration (BA, Dev, Ops, Architecture)",
+        "SME / mentoring of junior QA engineers"
+      ]
+    }
+  ]
+}

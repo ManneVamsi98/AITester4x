@@ -1,0 +1,93 @@
+{
+  "output": "E:/AI Tester 4x/AI Tester 4x/Chapter_04_Jobkit_AI/output/Manne_Vamsi_Hyland_SeniorTestEngineer.docx",
+  "docTitle": "Manne Vamsi — Senior Test Engineer",
+  "name": "MANNE VAMSI",
+  "title": "==SENIOR TEST ENGINEER==  ·  FUNCTIONAL & AUTOMATED TEST FRAMEWORKS  |  Hyderabad",
+  "contact": [
+    ["Tel: +91 8253456856", "Email: mannevamsi98@gmail.com"]
+  ],
+  "sections": [
+    {
+      "heading": "PROFILE SUMMARY",
+      "body": "Test Engineer with ==6+ years== of experience across ==all phases of the test lifecycle==, ==designing test plans, test procedures, and automated test frameworks== for enterprise web and SaaS products. ==Developed and maintained complex functional, integration, and non-functional tests== and automated frameworks, ==executed complex automated and manual tests==, and ==created and managed performance metrics, defects, test cases, and test results==. Experienced with ==Jenkins-style CI/CD== (Azure DevOps pipelines), ==Selenium/Playwright-style automation==, ==JMeter==, ==Postman/Bruno==, and ==MS SQL Server==, working in ==agile frameworks== and leading test-design standards."
+    },
+    {
+      "heading": "CORE SKILLS",
+      "rows": [
+        ["==Automation Frameworks==", "==Automated test framework development== · Selenium WebDriver · TestNG · BrowserStack LCNC · ACCELQ"],
+        ["==CI/CD==", "==Jenkins pipelines ==[or equivalent CI — fill-in]== · Azure DevOps CI/CD"],
+        ["==Performance Testing==", "==JMeter== ==[hands-on exposure — fill-in]=="],
+        ["==API Testing==", "==Postman== · ==[Bruno — fill-in]=="],
+        ["==Databases==", "==MS SQL Server== ==[SQL querying & validation — fill-in]=="],
+        ["Testing Types", "Functional · Integration · ==Non-functional== · Regression · Smoke · Sanity · Exploratory · API · Security"],
+        ["==Source Control & OS==", "==Git== · ==[TFS — fill-in]== · Windows"],
+        ["==Security Compliance==", "==[SOC2 / NIST / FedRAMP — fill-in]=="],
+        ["Defect & Project Tools", "Jira · Azure DevOps · Rally"]
+      ],
+      "note": "FILL-IN RULE — JD's essentials are Jenkins/XUnit-NUnit, MS SQL Server, and Windows. You have strong Selenium/TestNG framework and CI/CD evidence; the SQL and Jenkins brackets must be filled only with real experience (e.g. running SQL queries for validation). Do not add SOC2/NIST/FedRAMP without genuine exposure."
+    },
+    {
+      "heading": "PROFESSIONAL EXPERIENCE",
+      "roles": [
+        {
+          "title": "Quality Specialist (==QA SME==)",
+          "org": "Uniquode Applications Specialists LLP",
+          "meta": "Apr 2024 – Present  |  Hyderabad  |  SaaS / AWS Marketplace",
+          "bullets": [
+            "==Developed and maintained complex functional, integration, and regression tests== and automated test frameworks for a SaaS marketplace platform.",
+            "==Led the verification of system functionality== by executing complex automated and manual tests, analyzing results, and providing recommendations.",
+            "==Created and managed performance metrics, defects, test cases, and test results== across multiple releases; acted as the QA sign-off authority.",
+            "==Operated as a trusted advisor== on test tools and methodologies; ==identified and implemented better test tools and automation practices==.",
+            "==Influenced and led on team standards and processes== — planning, work estimation, peer reviews, and test design — in sprint ceremonies.",
+            "==Mentored, coached, and trained== 2 junior QA engineers on test execution, defect analysis, and automation.",
+            "==Supported the build and delivery pipeline==, including test environments and deployment validation."
+          ]
+        },
+        {
+          "title": "Tester",
+          "org": "Prohuman Technology Pvt. Ltd.",
+          "meta": "Aug 2023 – Mar 2024  |  Hyderabad  |  Customer Service / Web",
+          "bullets": [
+            "==Developed and executed functional, integration, and regression tests== for a web-based agent portal.",
+            "==Maintained automated test frameworks== (BrowserStack LCNC, ACCELQ) and executed manual tests.",
+            "==Created and managed test cases, results, and defect metrics== in Azure DevOps and Jira.",
+            "==Contributed to team planning and test design== in an agile team of 8."
+          ]
+        },
+        {
+          "title": "Software Engineer",
+          "org": "Allvy Software Solutions Pvt. Ltd.",
+          "meta": "Jan 2022 – Apr 2023  |  Hyderabad  |  Government Portal",
+          "bullets": [
+            "Designed test plans, test procedures, and test cases for a government portal.",
+            "==Developed Selenium automated tests== and executed functional, integration, system, and security testing.",
+            "Logged and tracked defects; coordinated with developers for resolution and regression validation."
+          ]
+        },
+        {
+          "title": "Software Engineer",
+          "org": "QTesters",
+          "meta": "Feb 2020 – Jan 2022  |  Hyderabad  |  Web, Mobile, Blockchain & E-commerce",
+          "bullets": [
+            "Performed end-to-end testing across web, mobile, blockchain, NFT, and e-commerce projects.",
+            "==Built Selenium regression suites== and executed REST API testing (REST Assured, Postman).",
+            "==Tracked defects and enhancements== in Jira and collaborated closely with development teams."
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "EDUCATION",
+      "rows": [["B.Tech Electronics and Communication Engineering", "Narayan Engineering College (JNTUA) · 2019"]]
+    },
+    {
+      "heading": "CERTIFICATIONS",
+      "bullets": [
+        "ACCELQ Automation Engineer & Certified ACCELQ Automation Expert",
+        "Selenium WebDriver with Java — Basics to Advanced + Frameworks — Udemy",
+        "SQL (Basic) Certificate — HackerRank",
+        "Katalon Practitioner & Professional Level Certification"
+      ]
+    }
+  ]
+}

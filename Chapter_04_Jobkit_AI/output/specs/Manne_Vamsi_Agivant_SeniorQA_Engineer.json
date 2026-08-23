@@ -1,0 +1,90 @@
+{
+  "output": "E:/AI Tester 4x/AI Tester 4x/Chapter_04_Jobkit_AI/output/Manne_Vamsi_Agivant_SeniorQA_Engineer.docx",
+  "docTitle": "Manne Vamsi — Senior QA Engineer",
+  "name": "MANNE VAMSI",
+  "title": "==SENIOR QA ENGINEER==  ·  FUNCTIONAL & REGRESSION TESTING  |  Hyderabad",
+  "contact": [
+    ["Tel: +91 8253456856", "Email: mannevamsi98@gmail.com"]
+  ],
+  "sections": [
+    {
+      "heading": "PROFILE SUMMARY",
+      "body": "QA Engineer with ==6+ years== of hands-on experience in ==Black Box Testing, Integration Testing, Regression Testing, and System Testing== for enterprise web and SaaS applications. ==Expanded end-to-end test coverage== and ==standardized UI testing== across key systems, with strong manual testing skills across functional and UI scenarios. Automated **270+ regression test cases** and ==documented test cases, results, and defects== clearly for engineering follow-up. Experienced with subscription, billing, and booking-style SaaS flows on the AWS Marketplace platform."
+    },
+    {
+      "heading": "CORE SKILLS",
+      "rows": [
+        ["==Black Box / Functional Testing==", "==Black box testing== · ==Functional testing== · ==UI test scenarios=="],
+        ["==Integration / Regression / System==", "==Integration testing== · ==Regression testing== · ==System testing== · Smoke · Sanity · Exploratory"],
+        ["==E2E Test Coverage==", "==End-to-end test coverage== · Test case design · ==Documenting test cases, results & defects=="],
+        ["Automation & Tools", "Selenium WebDriver · TestNG · BrowserStack LCNC · ACCELQ · TestSigma"],
+        ["==Test Infra==", "==[Quicksub / Trace framework — fill-in]=="],
+        ["Defect & Project Tools", "Azure DevOps · Jira · Rally"],
+        ["API & Databases", "Postman · REST Assured · SQL"]
+      ],
+      "note": "FILL-IN RULE — JD expects E2E coverage using their in-house Quicksub and Trace frameworks; you cannot claim those. Only fill with a genuinely comparable framework you have used, or delete the row. Your subscription / billing test work is your strongest evidence for this role."
+    },
+    {
+      "heading": "PROFESSIONAL EXPERIENCE",
+      "roles": [
+        {
+          "title": "Quality Specialist (==QA owner==)",
+          "org": "Uniquode Applications Specialists LLP",
+          "meta": "Apr 2024 – Present  |  Hyderabad  |  ==SaaS subscriptions & billing==",
+          "bullets": [
+            "==Expanded end-to-end (E2E) test coverage== for ==subscription management and billing workflows== on the SaaSify marketplace platform.",
+            "==Standardized UI testing== on an automation framework (BrowserStack LCNC / ACCELQ) to ==eliminate regressions caused by feature expansion== such as private offers and entitlement changes.",
+            "==Conducted black box, integration, regression, and system testing== across multiple releases.",
+            "==Performed manual testing== of subscription definition changes, validating customer, entitlement, and billing scenarios.",
+            "==Documented test cases, results, and identified defects== clearly in Azure DevOps and Jira for engineering follow-up.",
+            "Validated Salesforce and HubSpot integrations to ensure accurate subscription and CRM workflows."
+          ]
+        },
+        {
+          "title": "Tester",
+          "org": "Prohuman Technology Pvt. Ltd.",
+          "meta": "Aug 2023 – Mar 2024  |  Hyderabad  |  Customer Service / Web",
+          "bullets": [
+            "==Expanded functional and regression test coverage== across an 8-member Agile team.",
+            "==Standardized UI testing== and ==performed manual functional and UI testing== of service-request and account flows.",
+            "==Conducted black box, integration, regression, and system testing== across releases.",
+            "==Documented test cases, results, and defects== through the lifecycle in Azure DevOps and Jira."
+          ]
+        },
+        {
+          "title": "Software Engineer",
+          "org": "Allvy Software Solutions Pvt. Ltd.",
+          "meta": "Jan 2022 – Apr 2023  |  Hyderabad  |  Government Portal",
+          "bullets": [
+            "Designed test scenarios and test cases from functional requirements for a government portal.",
+            "Performed functional, regression, integration, and system testing.",
+            "Logged and tracked defects and coordinated regression validation with developers."
+          ]
+        },
+        {
+          "title": "Software Engineer",
+          "org": "QTesters",
+          "meta": "Feb 2020 – Jan 2022  |  Hyderabad  |  Web, Mobile, Blockchain & E-commerce",
+          "bullets": [
+            "Performed end-to-end testing of web, mobile, blockchain, NFT, and e-commerce applications.",
+            "==Conducted black box, integration, regression, and system testing== across client projects.",
+            "==Documented test cases, results, and defects== in Jira while collaborating with development teams."
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "EDUCATION",
+      "rows": [["B.Tech Electronics and Communication Engineering", "Narayan Engineering College (JNTUA) · 2019"]]
+    },
+    {
+      "heading": "CERTIFICATIONS",
+      "bullets": [
+        "ACCELQ Automation Engineer & Certified ACCELQ Automation Expert",
+        "Selenium WebDriver with Java — Basics to Advanced + Frameworks — Udemy",
+        "Katalon Practitioner & Professional Level Certification",
+        "SQL (Basic) Certificate — HackerRank"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "output": "E:/AI Tester 4x/AI Tester 4x/Chapter_04_Jobkit_AI/Naukari_output/Manne_Vamsi_QA_Analyst_White_Force_Outsourcing.docx",
+  "docTitle": "Manne Vamsi — QA Analyst — White Force Outsourcing Services",
+  "name": "MANNE VAMSI",
+  "title": "==QA ANALYST — FUNCTIONAL · REGRESSION · INTEGRATION TESTING==",
+  "contact": [
+    ["Hyderabad, India", "+91 8253456856", "mannevamsi98@gmail.com"],
+    ["Open to Bengaluru (Hybrid)", "Notice Period: [X]"]
+  ],
+  "margin": 0.45,
+  "sections": [
+    {
+      "heading": "SUMMARY",
+      "body": "==QA Analyst / Test Engineer== with 6+ years of hands-on software testing experience ==designing, planning, and executing functional, regression, and integration testing== for enterprise web applications. ==Prepares and maintains comprehensive test plans, test cases, test data, and workflow matrices==; manages the ==defect lifecycle== from identification through resolution using Jira and Azure DevOps; and ==supports release validation and UAT with business stakeholders==. ==Translates complex business rules into high-coverage test cases== across SaaS commerce, CRM, customer-service and government platforms. ==Proficient in SQL for backend data validation== and in API testing with Postman and REST Assured; strong analytical, edge-case testing and cross-functional communication skills."
+    },
+    {
+      "heading": "CORE SKILLS",
+      "rows": [
+        ["==End-to-End Testing==", "==Functional== · ==Regression== · ==Integration== · System · Smoke · Sanity · Exploratory · ==UAT support=="],
+        ["==Test Documentation==", "==Test Plans== · ==Test Cases== · ==Test Data== · ==User Workflow Matrices / RTM=="],
+        ["==Defect Lifecycle Management==", "==Identify, log, prioritise, track & close defects== (Jira · Azure DevOps)"],
+        ["==Trading Domain (target)==", "==[ETRM / CTRM exposure — see note]== · [OpenLink Endur] · [energy trading concepts]"],
+        ["==Backend & API Validation==", "==SQL database validation== · Postman · SoapUI (familiarity) · REST Assured"],
+        ["Tools", "Jira · TestRail (familiarity) · Zephyr (familiarity) · Rally · Azure DevOps"],
+        ["Methodologies", "Agile / Scrum · STLC · Release & UAT support"]
+      ],
+      "note": "FILL-IN — the JD's headline requirement is ETRM/CTRM (commodity trading) exposure. The resume shows no trading-platform work: [ETRM/CTRM] and [OpenLink Endur] are placeholders and this role is a stretch without them. If you can speak to trade-capture or settlement-adjacent workflows (e.g., billing, entitlement, subscription settlement), frame them honestly in an interview, but do not add them to the resume."
+    },
+    {
+      "heading": "PROFESSIONAL EXPERIENCE",
+      "roles": [
+        {
+          "title": "Quality Specialist ==(QA Analyst / SME)==",
+          "org": "Uniquode Applications Specialists LLP",
+          "meta": "Apr 2024 – Present  |  Hyderabad, India  |  SaaS · AWS Marketplace · CRM",
+          "bullets": [
+            "==Designed, planned, and executed functional, regression, and integration testing== for the SaaSify commerce platform, including ==end-to-end business workflow validation==",
+            "==Prepared and maintained comprehensive test plans, test cases, test data, and user workflow matrices== (RTM) aligned to business requirements.",
+            "==Managed the defect lifecycle== — identification, logging, prioritisation, triage, retesting and closure — using Azure DevOps and Jira.",
+            "==Collaborated with developers, product teams and business analysts== to ==translate complex business rules into high-coverage test cases==",
+            "==Supported release validation, sanity checks and UAT== with business stakeholders and AWS Partner customers.",
+            "==Performed SQL-based backend data validation== and reconciliation across subscription, billing and CRM systems; validated REST APIs with Postman and REST Assured.",
+            "==Analysed business and functional requirements== to design test scenarios and ensure requirement traceability."
+          ]
+        },
+        {
+          "title": "Tester",
+          "org": "Prohuman Technology Pvt. Ltd.",
+          "meta": "Aug 2023 – Mar 2024  |  Hyderabad, India  |  Customer Service · Web Application",
+          "bullets": [
+            "==Designed and executed functional, regression and integration test cases== for the Ezcom2 Agent Portal.",
+            "==Prepared test plans, test cases, test data and workflow matrices== based on business requirements.",
+            "==Logged, prioritised and tracked bugs== through resolution using Jira and Azure DevOps; supported UAT and release validation.",
+            "==Performed API and SQL-based backend validation== to verify business workflows."
+          ]
+        },
+        {
+          "title": "Software Engineer",
+          "org": "Allvy Software Solutions Pvt. Ltd.",
+          "meta": "Jan 2022 – Apr 2023  |  Andhra Pradesh, India  |  Government Portal",
+          "bullets": [
+            "Designed test scenarios, test cases and test data from functional requirements for a government portal.",
+            "Performed functional, regression, integration, system, API and security testing; logged defects and tracked to closure.",
+            "==Performed SQL-based data validation== and reconciled records across portal modules."
+          ]
+        },
+        {
+          "title": "Software Engineer",
+          "org": "QTesters",
+          "meta": "Feb 2020 – Jan 2022  |  Hyderabad, India  |  Web · Mobile · E-commerce · Blockchain",
+          "bullets": [
+            "==Designed and executed functional, regression and integration tests== for web, mobile, e-commerce and blockchain applications.",
+            "==Managed the defect lifecycle== in Jira, collaborating with development teams on resolution.",
+            "Executed REST API testing with REST Assured and Postman; performed cross-browser and cross-device testing."
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "EDUCATION",
+      "rows": [["B. Tech, Electronics and Communication Engineering", "Narayan Engineering College (JNTUA) · 2019"]]
+    },
+    {
+      "heading": "CERTIFICATIONS",
+      "bullets": [
+        "Learn Generative AI in Software Testing — Udemy",
+        "SQL (Basic) — HackerRank",
+        "Selenium WebDriver with Java — Udemy",
+        "ACCELQ Automation Engineer & Certified ACCELQ Automation Expert — ACCELQ",
+        "Katalon Practitioner & Professional Level — Katalon"
+      ]
+    },
+    {
+      "heading": "STRENGTHS",
+      "bullets": [
+        "Strong analytical, logical-reasoning & edge-case testing",
+        "Attention to detail & defect-reporting clarity",
+        "Excellent verbal and written communication",
+        "Cross-functional collaboration (Dev, Product, BA, Stakeholders)"
+      ]
+    }
+  ]
+}

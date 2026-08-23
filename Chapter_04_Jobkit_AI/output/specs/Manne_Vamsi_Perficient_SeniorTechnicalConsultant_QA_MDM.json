@@ -1,0 +1,91 @@
+{
+  "output": "E:/AI Tester 4x/AI Tester 4x/Chapter_04_Jobkit_AI/output/Manne_Vamsi_Perficient_SeniorTechnicalConsultant_QA_MDM.docx",
+  "docTitle": "Manne Vamsi — Senior Technical Consultant QA MDM",
+  "name": "MANNE VAMSI",
+  "title": "==SENIOR TECHNICAL CONSULTANT QA MDM==  ·  MANUAL & AUTOMATION QA  |  Hyderabad",
+  "contact": [
+    ["Tel: +91 8253456856", "Email: mannevamsi98@gmail.com"]
+  ],
+  "sections": [
+    {
+      "heading": "PROFILE SUMMARY",
+      "body": "QA Engineer with ==6+ years== of experience across the full software development lifecycle — ==estimating, technical design, implementation, testing, documentation, deployment, and support== — for enterprise SaaS and web applications. ==Strong manual and automation QA skills==, including test planning, test case design, automation framework development (Selenium WebDriver, TestNG, ACCELQ, BrowserStack LCNC), and API testing with Postman and REST Assured. ==Demonstrated ability to leverage AI tools== to enhance productivity and streamline workflows, with ==training in Generative AI applied to software testing==."
+    },
+    {
+      "heading": "CORE SKILLS",
+      "rows": [
+        ["==SDLC & Delivery==", "==Estimation== · ==Technical design== · Implementation & ==documentation== · ==Testing & deployment support=="],
+        ["==QA — Manual & Automation==", "==Manual QA== · ==Automation QA== · Test planning · Test case design · Defect management"],
+        ["Automation Tools", "Selenium WebDriver · TestNG · BrowserStack LCNC · ACCELQ · TestSigma"],
+        ["API & Databases", "Postman · REST Assured · SQL"],
+        ["==AI-Enhanced Platforms==", "==AI tools for productivity & workflows== · Generative AI training (Udemy)"],
+        ["Project Tools", "Azure DevOps · Jira · Rally"],
+        ["==MDM ==", "==[Master Data Management experience — fill-in]=="]
+      ],
+      "note": "FILL-IN RULE — JD's headline is 'Sr QA Engineer, MDM — manual and automation skills required'. You have the manual + automation profile; the MDM bracket is only honest if you have real master-data-management testing exposure. Otherwise delete the row and address the gap in the cover note."
+    },
+    {
+      "heading": "PROFESSIONAL EXPERIENCE",
+      "roles": [
+        {
+          "title": "Quality Specialist (==QA SME==)",
+          "org": "Uniquode Applications Specialists LLP",
+          "meta": "Apr 2024 – Present  |  Hyderabad  |  SaaS / AWS Marketplace",
+          "bullets": [
+            "==Participated in technical planning and requirements gathering== — design, code, test, troubleshoot, and document engineering software for a SaaS marketplace platform.",
+            "==Ensured the technical software development process is followed==, familiar with industry best practices for software development and quality.",
+            "==Demonstrated the ability to adapt and work with team members of various experience levels== — mentoring 2 junior QA engineers and coordinating with developers, DevOps, and product.",
+            "==Leveraged AI tools== to enhance test productivity and streamline workflows, applying generative AI training to test design and automation.",
+            "==Designed and executed manual and automated tests== across functional, regression, API, security, and end-to-end suites.",
+            "==Documented engineering software== — test plans, test cases, results, and defect reports in Azure DevOps and Jira."
+          ]
+        },
+        {
+          "title": "Tester",
+          "org": "Prohuman Technology Pvt. Ltd.",
+          "meta": "Aug 2023 – Mar 2024  |  Hyderabad  |  Customer Service / Web",
+          "bullets": [
+            "==Participated in technical planning and requirements gathering== for an agent portal.",
+            "==Tested, troubleshooted, and documented== engineering software applications across functional, regression, integration, and API suites.",
+            "==Ensured the technical software development process was followed== and industry best practices applied.",
+            "==Worked with team members of various experience levels== across an 8-member agile team."
+          ]
+        },
+        {
+          "title": "Software Engineer",
+          "org": "Allvy Software Solutions Pvt. Ltd.",
+          "meta": "Jan 2022 – Apr 2023  |  Hyderabad  |  Government Portal",
+          "bullets": [
+            "Participated in design, test, and documentation phases for a government portal.",
+            "Designed test scenarios and executed functional, regression, integration, system, and API testing.",
+            "Tracked defects and supported resolution and regression validation."
+          ]
+        },
+        {
+          "title": "Software Engineer",
+          "org": "QTesters",
+          "meta": "Feb 2020 – Jan 2022  |  Hyderabad  |  Web, Mobile, Blockchain & E-commerce",
+          "bullets": [
+            "Participated in all aspects of testing, documentation, and support for multiple client applications.",
+            "Performed end-to-end functional, integration, and regression testing across web and mobile.",
+            "Tracked defects in Jira and collaborated with development teams."
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "EDUCATION",
+      "rows": [["B.Tech Electronics and Communication Engineering", "Narayan Engineering College (JNTUA) · 2019"]]
+    },
+    {
+      "heading": "CERTIFICATIONS",
+      "bullets": [
+        "Learn Generative AI in Software Testing — Udemy",
+        "ACCELQ Automation Engineer & Certified ACCELQ Automation Expert",
+        "Selenium WebDriver with Java — Basics to Advanced + Frameworks — Udemy",
+        "Katalon Practitioner & Professional Level Certification",
+        "SQL (Basic) Certificate — HackerRank"
+      ]
+    }
+  ]
+}

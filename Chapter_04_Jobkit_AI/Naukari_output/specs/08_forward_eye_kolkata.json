@@ -1,0 +1,102 @@
+{
+  "output": "E:/AI Tester 4x/AI Tester 4x/Chapter_04_Jobkit_AI/Naukari_output/Manne_Vamsi_Automation_Test_Engineer_Forward_Eye_Kolkata.docx",
+  "docTitle": "Manne Vamsi — Automation Test Engineer (Mobile App, Python) — Forward Eye Technologies (Kolkata)",
+  "name": "MANNE VAMSI",
+  "title": "==AUTOMATION TEST ENGINEER — QA AUTOMATION · MOBILE APP==",
+  "contact": [
+    ["Hyderabad, India", "+91 8253456856", "mannevamsi98@gmail.com"],
+    ["Open to Remote / Hybrid / Onsite", "Notice Period: [X]"]
+  ],
+  "margin": 0.45,
+  "sections": [
+    {
+      "heading": "SUMMARY",
+      "body": "==QA Automation Engineer== with 6+ years of experience ==designing, developing, and maintaining automated test frameworks and test scripts== for web applications, and ==hands-on mobile app testing on Android and iOS==. ==Automated 270+ regression test cases== using BrowserStack LCNC and ACCELQ, developed Selenium WebDriver automation, and ==integrated test suites into CI/CD pipelines== (Azure DevOps). ==Performs functional, regression and API testing==, ==analyses test results, reports defects and helps troubleshoot issues==, and creates and maintains test documentation. ==Currently upskilling in Python for test automation== through structured training, with a strong automation foundation to apply across mobile and web platforms."
+    },
+    {
+      "heading": "CORE SKILLS",
+      "rows": [
+        ["==Test Automation (Python)==", "==[Python — see note]== · ==[Appium]== · [UIAutomator] · [XCUITest] · PyTest (familiarity)"],
+        ["==Mobile Testing==", "==Android & iOS mobile application testing== · Cross-device testing"],
+        ["==Automation (current)==", "Selenium WebDriver · TestNG · BrowserStack LCNC · ACCELQ · TestSigma"],
+        ["==API Testing==", "==Postman== · REST Assured · requests (familiarity)"],
+        ["==CI/CD & VCS==", "==Azure DevOps Pipelines== · Git · Jenkins (familiarity)"],
+        ["Testing Types", "Functional · Regression · Performance (baseline) · Smoke · Sanity · Integration · System"],
+        ["Methodologies", "Agile/Scrum · STLC · Test documentation & planning"]
+      ],
+      "note": "FILL-IN — the JD's gate is Python + Appium mobile automation. The resume shows mobile testing on Android/iOS but automation via Java/Selenium and low-code tools, with Python only 'learning'. [Python]/[Appium] are placeholders — fill only if genuinely true. If not, this role is a stretch: the honest angle is mobile functional testing + strong automation framework experience + active Python upskilling, best framed in a cover note."
+    },
+    {
+      "heading": "PROFESSIONAL EXPERIENCE",
+      "roles": [
+        {
+          "title": "Quality Specialist ==(QA Automation Engineer / SME)==",
+          "org": "Uniquode Applications Specialists LLP",
+          "meta": "Apr 2024 – Present  |  Hyderabad, India  |  SaaS · AWS Marketplace · CRM",
+          "bullets": [
+            "==Designed and implemented automated test scripts== within existing automation frameworks (BrowserStack LCNC, ACCELQ), automating ==270+ regression test cases==.",
+            "==Performed functional, regression, API, security and end-to-end testing== of web applications, ==analysing test results, reporting defects and troubleshooting issues==.",
+            "==Integrated automated test suites into CI/CD pipelines== (Azure DevOps), keeping them reliable enough to gate merges and releases.",
+            "==Created and maintained test documentation==, including test cases and test plans, and ==participated in code and design reviews==.",
+            "==Collaborated with developers, product managers and other QA engineers== to identify test requirements in an Agile team.",
+            "==Mentored 2 junior QA engineers== and acted as QA sign-off authority for production deployments."
+          ]
+        },
+        {
+          "title": "Tester",
+          "org": "Prohuman Technology Pvt. Ltd.",
+          "meta": "Aug 2023 – Mar 2024  |  Hyderabad, India  |  Customer Service · Web Application",
+          "bullets": [
+            "==Developed and maintained automated test scripts== using BrowserStack LCNC and ACCELQ for the Ezcom2 Agent Portal.",
+            "==Performed functional, regression, smoke, sanity, integration, exploratory, API and security testing==, ==analysing results and reporting defects== in Jira and Azure DevOps.",
+            "==Validated REST APIs== using Postman and ==verified backend workflows== with SQL.",
+            "==Created and maintained test documentation== including test cases and plans; supported release validation."
+          ]
+        },
+        {
+          "title": "Software Engineer",
+          "org": "Allvy Software Solutions Pvt. Ltd.",
+          "meta": "Jan 2022 – Apr 2023  |  Andhra Pradesh, India  |  Government Portal",
+          "bullets": [
+            "==Developed Selenium WebDriver automation scripts== for critical business workflows and ==executed automated suites==.",
+            "==Performed functional, regression, integration, system, API and security testing==; logged defects and tracked to closure.",
+            "==Analysed test results== to identify defects and coordinate regression validation."
+          ]
+        },
+        {
+          "title": "Software Engineer",
+          "org": "QTesters",
+          "meta": "Feb 2020 – Jan 2022  |  Hyderabad, India  |  Web · Mobile · E-commerce · Blockchain",
+          "bullets": [
+            "==Performed mobile application testing on Android and iOS platforms== across multiple client projects.",
+            "==Developed Selenium automation scripts== for regression testing and ==executed REST API testing== with REST Assured and Postman.",
+            "==Analysed test results, reported defects in Jira and helped troubleshoot issues== with development teams."
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "EDUCATION",
+      "rows": [["B. Tech, Electronics and Communication Engineering", "Narayan Engineering College (JNTUA) · 2019"]]
+    },
+    {
+      "heading": "CERTIFICATIONS",
+      "bullets": [
+        "Learn Generative AI in Software Testing — Udemy",
+        "Selenium WebDriver with Java - Basics to Advanced + Frameworks — Udemy",
+        "SQL (Basic) — HackerRank",
+        "ACCELQ Automation Engineer & Certified ACCELQ Automation Expert — ACCELQ",
+        "Katalon Practitioner & Professional Level — Katalon"
+      ]
+    },
+    {
+      "heading": "STRENGTHS",
+      "bullets": [
+        "Automation-first mindset & framework ownership",
+        "Strong analytical, debugging & problem-solving skills",
+        "Mobile + web testing breadth",
+        "Collaboration & clear test documentation"
+      ]
+    }
+  ]
+}

@@ -9,3 +9,4 @@ config.json
 # Python
 __pycache__/
 *.pyc
+Chapter_04_Jobkit_AI/Resume_Helper/resume-tailor/scripts/node_modules/  

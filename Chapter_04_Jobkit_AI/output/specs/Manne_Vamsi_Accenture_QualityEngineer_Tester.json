@@ -1,0 +1,94 @@
+{
+  "output": "E:/AI Tester 4x/AI Tester 4x/Chapter_04_Jobkit_AI/output/Manne_Vamsi_Accenture_QualityEngineer_Tester.docx",
+  "docTitle": "Manne Vamsi — Quality Engineer (Tester)",
+  "name": "MANNE VAMSI",
+  "title": "==QUALITY ENGINEER (TESTER)==  ·  FUNCTIONAL TEST PLANNING  |  Hyderabad",
+  "contact": [
+    ["Tel: +91 8253456856", "Email: mannevamsi98@gmail.com"]
+  ],
+  "sections": [
+    {
+      "heading": "PROFILE SUMMARY",
+      "body": "QA / Quality Engineer with ==6+ years== of experience across ==Functional Test Planning==, Automation Testing, API Testing, and SaaS Product Testing for enterprise web and mobile applications. ==Design and execute test cases from functional requirements==, ==performing continuous testing across security, API, and regression suites==, and ==monitoring and reporting defects== to drive end-to-end quality. Automated **270+ regression test cases** using BrowserStack LCNC and ACCELQ, improving regression coverage and cutting manual effort."
+    },
+    {
+      "heading": "CORE SKILLS",
+      "rows": [
+        ["==Functional Test Planning==", "Test strategy & coverage · Test case design & execution · ==Test planning & estimation=="],
+        ["Testing Types", "Functional · Regression · Smoke · Sanity · Integration · Security · System · Exploratory · UAT · End-to-End"],
+        ["Automation & Tools", "Selenium WebDriver · TestNG · BrowserStack LCNC · ACCELQ · TestSigma"],
+        ["API & Databases", "Postman · REST Assured · SQL"],
+        ["DevOps & Agile", "==Azure DevOps CI/CD Pipelines== · Jira · Rally · Agile / Scrum"],
+        ["==AI in Testing==", "==Training in Generative AI for Software Testing=="]
+      ],
+      "note": "FILL-IN RULE — the JD names Functional Test Planning as a must-have; you have real evidence of this in every role. Where a bracket appears, only fill with tools you have genuinely shipped with."
+    },
+    {
+      "heading": "PROFESSIONAL EXPERIENCE",
+      "roles": [
+        {
+          "title": "Quality Specialist (==QA SME==)",
+          "org": "Uniquode Applications Specialists LLP",
+          "meta": "Apr 2024 – Present  |  Hyderabad  |  ==SaaS / AWS Marketplace==",
+          "bullets": [
+            "==Conduct functional test planning== for a SaaS marketplace platform, ==developing and executing test cases based on functional requirements== across multiple releases.",
+            "==Developed the automation strategy== and automated **270+ regression test cases** with BrowserStack LCNC and ACCELQ, improving regression coverage and reducing manual effort.",
+            "==Perform continuous testing== across ==security==, ==API==, and ==regression== suites, validating authentication, request/response payloads, business logic, and error handling.",
+            "==Monitor and report defects==: coordinate defect triage, manage the defect lifecycle in Azure DevOps, and work with developers to ==resolve them==.",
+            "==Participate in code and design reviews== and act as the QA sign-off authority for production deployments.",
+            "==Mentor== 2 junior QA engineers and ==contribute to key decisions== in sprint planning, backlog refinement, and sprint reviews.",
+            "==Collaborate with cross-functional teams== (Developers, Product Owners, Business Analysts) to ensure quality standards are met."
+          ]
+        },
+        {
+          "title": "Tester",
+          "org": "Prohuman Technology Pvt. Ltd.",
+          "meta": "Aug 2023 – Mar 2024  |  Hyderabad  |  Customer Service / Web",
+          "bullets": [
+            "==Conducted functional test planning==: prepared Test Plans, Test Scenarios, Test Cases, and Test Data from business requirements.",
+            "==Developed and executed test cases== for Functional, Regression, Smoke, Sanity, Integration, Exploratory, API, and Security testing.",
+            "==Monitored and reported defects== through the lifecycle using Azure DevOps and Jira, and worked with developers to resolve them.",
+            "Supported release validation activities and ensured production readiness within an 8-member Agile team."
+          ]
+        },
+        {
+          "title": "Software Engineer",
+          "org": "Allvy Software Solutions Pvt. Ltd.",
+          "meta": "Jan 2022 – Apr 2023  |  Hyderabad  |  Government Portal",
+          "bullets": [
+            "==Designed test scenarios and test cases== based on functional requirements for a government portal.",
+            "Performed Functional, Regression, Integration, System, API, and Security testing.",
+            "Developed Selenium automation scripts for critical business workflows and analyzed execution results.",
+            "Logged and tracked defects and coordinated with developers for resolution and regression validation."
+          ]
+        },
+        {
+          "title": "Software Engineer",
+          "org": "QTesters",
+          "meta": "Feb 2020 – Jan 2022  |  Hyderabad  |  Web, Mobile, Blockchain & E-commerce",
+          "bullets": [
+            "Performed end-to-end testing of Web, Mobile, Blockchain, NFT, and E-commerce applications.",
+            "==Developed and executed test cases== across multiple client projects; built Selenium regression scripts.",
+            "Executed REST API testing with REST Assured and Postman; performed cross-browser and cross-platform testing.",
+            "==Monitored and reported defects== using Jira while collaborating with development teams."
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "EDUCATION",
+      "rows": [["B.Tech Electronics and Communication Engineering", "Narayan Engineering College (JNTUA) · 2019 · 15 years full-time education"]]
+    },
+    {
+      "heading": "CERTIFICATIONS",
+      "bullets": [
+        "Learn Generative AI in Software Testing — Udemy",
+        "Java and Testing — ABC Technology Training & Upskilling",
+        "Selenium WebDriver with Java — Basics to Advanced + Frameworks — Udemy",
+        "ACCELQ Automation Engineer & Certified ACCELQ Automation Expert",
+        "Katalon Practitioner & Professional Level Certification",
+        "SQL (Basic) Certificate — HackerRank"
+      ]
+    }
+  ]
+}

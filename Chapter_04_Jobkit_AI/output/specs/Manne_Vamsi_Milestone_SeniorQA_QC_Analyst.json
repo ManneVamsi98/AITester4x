@@ -1,0 +1,89 @@
+{
+  "output": "E:/AI Tester 4x/AI Tester 4x/Chapter_04_Jobkit_AI/output/Manne_Vamsi_Milestone_SeniorQA_QC_Analyst.docx",
+  "docTitle": "Manne Vamsi — Senior QA / QC Analyst",
+  "name": "MANNE VAMSI",
+  "title": "==SENIOR QA / QC ANALYST==  ·  UAT & TEST EVIDENCE  |  Hyderabad",
+  "contact": [
+    ["Tel: +91 8253456856", "Email: mannevamsi98@gmail.com"]
+  ],
+  "sections": [
+    {
+      "heading": "PROFILE SUMMARY",
+      "body": "QA / QC Analyst with ==6+ years== of experience in ==manual QA / UAT==, ==test-script authoring==, ==test evidence and defect documentation==, and release-gate quality controls for enterprise SaaS and web applications. ==Authored UAT test scripts and test cases mapped to requirements==, ==produced test evidence and execution logs==, and ==maintained traceability in Jira== while ==coordinating defect triage and retest cycles== with business and product teams. Hands-on with Azure DevOps, Jira, Confluence, and Postman; ==trained in Generative AI applied to testing==."
+    },
+    {
+      "heading": "CORE SKILLS",
+      "rows": [
+        ["==UAT Testing==", "==UAT test script authoring== · ==Test case design mapped to requirements== · ==Test evidence & execution logs== · ==Defect documentation=="],
+        ["==Defect & Traceability==", "==Defect triage & retest cycles== · ==Jira traceability== · Azure DevOps · ==Confluence=="],
+        ["Testing Types", "Functional · Regression · Smoke · Sanity · Integration · System · Exploratory · End-to-End · API"],
+        ["==Environment & Release==", "==[Dev/QA/Prod environment promotion testing — fill-in]== · Release-gate validation"],
+        ["Automation & Tools", "Selenium WebDriver · TestNG · BrowserStack LCNC · ACCELQ · Postman · REST Assured · SQL"],
+        ["==AI / LLM App Testing==", "==Training in Generative AI for Software Testing=="]
+      ],
+      "note": "FILL-IN RULE — JD must-haves are manual QA/UAT in regulated environments plus environment promotion testing. Your resume shows strong UAT-adjacent and evidence-driven work but not GxP/pharma or ALM/Xray; do NOT add those. Fill the environment-promotion bracket only with real release-gate experience."
+    },
+    {
+      "heading": "PROFESSIONAL EXPERIENCE",
+      "roles": [
+        {
+          "title": "Quality Specialist (==UAT & release-gate QA==)",
+          "org": "Uniquode Applications Specialists LLP",
+          "meta": "Apr 2024 – Present  |  Hyderabad  |  ==SaaS / AWS Marketplace==",
+          "bullets": [
+            "==Authored test scripts and test cases mapped to requirements== for a SaaS marketplace platform, ==coordinating execution with business users and the product team==.",
+            "==Produced test evidence, execution logs, and defect documentation== to quality-control standards as QA sign-off authority for production releases.",
+            "==Managed defect triage and retest cycles==, maintaining defect lifecycles in Azure DevOps and Jira and partnering with BA and Quality teams.",
+            "==Maintained traceability in Jira== and documented test approach and results in Confluence and Azure DevOps.",
+            "==Supported release-gate validation==, ensuring defect-light production deployments across multiple releases.",
+            "==Tested LLM-adjacent flows== — validating AI-enabled platform behavior, request/response payloads, and prompt-driven outcomes within the marketplace."
+          ]
+        },
+        {
+          "title": "Tester",
+          "org": "Prohuman Technology Pvt. Ltd.",
+          "meta": "Aug 2023 – Mar 2024  |  Hyderabad  |  Customer Service / Web",
+          "bullets": [
+            "==Authored UAT- and requirement-mapped test scripts, test cases, and test data== for an agent portal.",
+            "==Executed functional, integration, regression, and system testing== and ==produced execution evidence== for release validation.",
+            "==Documented defects== and coordinated retest cycles with developers, BAs, and Product Owners via Azure DevOps and Jira.",
+            "==Supported environment promotion== from Dev through QA to production readiness."
+          ]
+        },
+        {
+          "title": "Software Engineer",
+          "org": "Allvy Software Solutions Pvt. Ltd.",
+          "meta": "Jan 2022 – Apr 2023  |  Hyderabad  |  Government Portal",
+          "bullets": [
+            "Designed test scenarios, test cases, and test data from functional requirements; executed full test cycles.",
+            "==Logged and tracked defects== and maintained test artifacts to standard.",
+            "Coordinated with developers for defect resolution and regression validation."
+          ]
+        },
+        {
+          "title": "Software Engineer",
+          "org": "QTesters",
+          "meta": "Feb 2020 – Jan 2022  |  Hyderabad  |  Web, Mobile, Blockchain & E-commerce",
+          "bullets": [
+            "Authored and executed test cases across web, mobile, blockchain, NFT, and e-commerce projects.",
+            "==Documented defects and results== in Jira while collaborating with development teams."
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "EDUCATION",
+      "rows": [["B.Tech Electronics and Communication Engineering", "Narayan Engineering College (JNTUA) · 2019 · 15 years full-time education"]]
+    },
+    {
+      "heading": "CERTIFICATIONS",
+      "bullets": [
+        "Learn Generative AI in Software Testing — Udemy",
+        "ACCELQ Automation Engineer & Certified ACCELQ Automation Expert",
+        "Selenium WebDriver with Java — Basics to Advanced + Frameworks — Udemy",
+        "Katalon Practitioner & Professional Level Certification",
+        "SQL (Basic) Certificate — HackerRank"
+      ]
+    }
+  ]
+}

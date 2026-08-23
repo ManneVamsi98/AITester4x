@@ -1,0 +1,91 @@
+{
+  "output": "E:/AI Tester 4x/AI Tester 4x/Chapter_04_Jobkit_AI/output/Manne_Vamsi_Accenture_QualityEngineer.docx",
+  "docTitle": "Manne Vamsi — Quality Engineer",
+  "name": "MANNE VAMSI",
+  "title": "==QUALITY ENGINEER==  ·  ==AUTOMATED TESTING==  |  Hyderabad",
+  "contact": [
+    ["Tel: +91 8253456856", "Email: mannevamsi98@gmail.com"]
+  ],
+  "sections": [
+    {
+      "heading": "PROFILE SUMMARY",
+      "body": "QA / Quality Engineer with ==6+ years== of experience in ==Automated Testing==, test automation strategy, and API / regression / security suite execution for enterprise web and mobile applications. ==Created automation strategies and automated scripts==, automated **270+ regression test cases** using BrowserStack LCNC and ACCELQ, and ==participated in code reviews== and ==continuous improvement activities== for the end-to-end testing process. Experienced as an ==SME==, leading team decisions and ==facilitating knowledge-sharing sessions==."
+    },
+    {
+      "heading": "CORE SKILLS",
+      "rows": [
+        ["==Automated Testing==", "Automation strategy & script development · Test automation frameworks (Selenium WebDriver, TestNG, ACCELQ, BrowserStack LCNC)"],
+        ["Testing Types", "Functional · Regression · Smoke · Sanity · Integration · ==Security Testing== · System · Exploratory · UAT · End-to-End"],
+        ["==CI/CD & DevTools==", "==Azure DevOps CI/CD Pipelines== · Jira · Rally · Git"],
+        ["API & Databases", "Postman · REST Assured · SQL"],
+        ["==Performance Testing==", "==[Performance testing exposure — see fill-in rule]=="],
+        ["AI in Testing", "==Training in Generative AI for Software Testing=="]
+      ],
+      "note": "FILL-IN RULE — JD's must-have is Automated Testing (you have strong evidence). The Performance Testing row is a JD nice-to-have: fill only with real exposure (e.g. JMeter basics) or delete the row."
+    },
+    {
+      "heading": "PROFESSIONAL EXPERIENCE",
+      "roles": [
+        {
+          "title": "Quality Specialist (==QA SME==)",
+          "org": "Uniquode Applications Specialists LLP",
+          "meta": "Apr 2024 – Present  |  Hyderabad  |  ==SaaS / AWS Marketplace==",
+          "bullets": [
+            "==Created the automation strategy== and automated **270+ regression test cases** using BrowserStack LCNC and ACCELQ, improving regression coverage and reducing manual effort.",
+            "==Performed continuous testing== for ==security==, ==API==, and ==regression== suites across multiple releases, validating authentication, payloads, business logic, and error handling.",
+            "==Participated in code and design reviews==, acting as the QA sign-off authority for production deployments.",
+            "==Facilitated knowledge-sharing sessions== and mentored 2 junior QA engineers; ==contributed to key decisions== in sprint planning, backlog refinement, and sprint reviews.",
+            "==Developed and maintained comprehensive documentation== for testing processes, automation frameworks, and release validation.",
+            "==Managed the team to perform==: assigned testing activities, reviewed test cases, and validated defect reports as the primary QA owner."
+          ]
+        },
+        {
+          "title": "Tester",
+          "org": "Prohuman Technology Pvt. Ltd.",
+          "meta": "Aug 2023 – Mar 2024  |  Hyderabad  |  Customer Service / Web",
+          "bullets": [
+            "==Created and maintained automated test scripts== using BrowserStack LCNC and ACCELQ for regression coverage.",
+            "Executed Functional, Regression, Smoke, Sanity, Integration, Exploratory, API, and Security testing.",
+            "==Monitored and reported defects== through Azure DevOps and Jira; supported release validation and production readiness.",
+            "Prepared Test Plans, Test Scenarios, Test Cases, and Test Data from business requirements."
+          ]
+        },
+        {
+          "title": "Software Engineer",
+          "org": "Allvy Software Solutions Pvt. Ltd.",
+          "meta": "Jan 2022 – Apr 2023  |  Hyderabad  |  Government Portal",
+          "bullets": [
+            "==Developed Selenium automation scripts== for critical business workflows and analyzed test execution results.",
+            "Performed Functional, Regression, Integration, System, API, and Security testing.",
+            "Logged and tracked defects; coordinated with developers for resolution and regression validation."
+          ]
+        },
+        {
+          "title": "Software Engineer",
+          "org": "QTesters",
+          "meta": "Feb 2020 – Jan 2022  |  Hyderabad  |  Web, Mobile, Blockchain & E-commerce",
+          "bullets": [
+            "==Developed Selenium automation scripts== for regression testing across multiple client projects.",
+            "Executed REST API testing using REST Assured and Postman; performed cross-browser and cross-platform testing.",
+            "==Monitored and reported defects== using Jira while collaborating with development teams."
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "EDUCATION",
+      "rows": [["B.Tech Electronics and Communication Engineering", "Narayan Engineering College (JNTUA) · 2019 · 15 years full-time education"]]
+    },
+    {
+      "heading": "CERTIFICATIONS",
+      "bullets": [
+        "ACCELQ Automation Engineer & Certified ACCELQ Automation Expert",
+        "Selenium WebDriver with Java — Basics to Advanced + Frameworks — Udemy",
+        "Learn Generative AI in Software Testing — Udemy",
+        "Katalon Practitioner & Professional Level Certification",
+        "Java and Testing — ABC Technology Training & Upskilling",
+        "SQL (Basic) Certificate — HackerRank"
+      ]
+    }
+  ]
+}

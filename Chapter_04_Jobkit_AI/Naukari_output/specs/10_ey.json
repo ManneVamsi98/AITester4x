@@ -1,0 +1,104 @@
+{
+  "output": "E:/AI Tester 4x/AI Tester 4x/Chapter_04_Jobkit_AI/Naukari_output/Manne_Vamsi_Manual_Tester_EY.docx",
+  "docTitle": "Manne Vamsi — Manual Tester (Retail / Airline / Travel / Hospitality) — EY",
+  "name": "MANNE VAMSI",
+  "title": "==MANUAL TESTER — RETAIL · AIRLINE · TRAVEL · HOSPITALITY==",
+  "contact": [
+    ["Hyderabad, India", "+91 8253456856", "mannevamsi98@gmail.com"],
+    ["Open to Kochi (Hybrid)", "Notice Period: [X]"]
+  ],
+  "margin": 0.45,
+  "sections": [
+    {
+      "heading": "SUMMARY",
+      "body": "==Manual Test Engineer== with 6+ years of experience ==preparing and executing test plans, scenarios and scripts== across web, mobile and ==e-commerce== applications. ==Leads project-team QA activities==, acting as SME and QA sign-off authority, and ==coordinates with stakeholders through DSR/WSR, Scrum and client calls==. ==Hands-on with test management tools Jira and Azure DevOps==; working knowledge of test automation (Selenium WebDriver, BrowserStack LCNC, ACCELQ), ==API testing (Postman, REST Assured)==, and ==thorough knowledge of database validation== including ==ETL-style data reconciliation== across subscription, billing and CRM systems. ==Defines, monitors and reports on SLAs== for releases and production readiness, manages resources for on-time delivery, and mitigates software-quality risks at each phase of STLC."
+    },
+    {
+      "heading": "CORE SKILLS",
+      "rows": [
+        ["==Manual Testing==", "==Test Planning, Estimation & Strategy== · ==Test Scenario / Script design== · Functional · Regression · Smoke · Sanity · Integration · System · Exploratory · UAT"],
+        ["==Domain (target)==", "==[Retail — see note]== · [Airline] · [Travel] · [Hospitality] · ==E-commerce & marketplace testing (retail-adjacent)=="],
+        ["==Test Management==", "==Jira== · ==Azure DevOps== · Rally · [ALM (familiarity)]"],
+        ["==API Testing==", "Postman · REST Assured · SoapUI (familiarity)"],
+        ["==Database & ETL==", "==SQL data validation & reconciliation== · ==[ETL testing — see note]=="],
+        ["Automation (adjacent)", "Selenium WebDriver · BrowserStack LCNC · ACCELQ · TestNG"],
+        ["==Leadership & SLAs==", "==SME & QA sign-off authority== · ==mentoring junior QA engineers== · ==SLA definition, monitoring & reporting=="]
+      ],
+      "note": "FILL-IN — the JD's gate is Retail/Airline/Travel/Hospitality domain experience. The resume shows e-commerce (retail-adjacent) but no airline/travel/hospitality: those are [placeholders]. If genuinely absent, this is a stretch — the honest angle is e-commerce + marketplace testing (retail), proven team-lead/SME experience, and data reconciliation. [ETL testing] also needs genuine evidence; the resume supports SQL-based data reconciliation, not ETL pipelines."
+    },
+    {
+      "heading": "PROFESSIONAL EXPERIENCE",
+      "roles": [
+        {
+          "title": "Quality Specialist ==(Manual Test Lead / SME / QA Sign-off Authority)==",
+          "org": "Uniquode Applications Specialists LLP",
+          "meta": "Apr 2024 – Present  |  Hyderabad, India  |  SaaS · AWS Marketplace · CRM · E-commerce",
+          "bullets": [
+            "==Lead a 6-member project team== and monitor all project activities end-to-end, acting as the ==primary QA owner, SME and QA sign-off authority== for production deployments.",
+            "==Participate in and lead status calls, Scrum calls and client meetings==, reviewing and sending out DSR/WSR to stakeholders.",
+            "==Develop and maintain robust testing strategies and processes== — test planning, estimation, requirement gathering and analysis, test scenarios and scripts — ensuring they are properly implemented.",
+            "==Prepare and execute test plans and test cases, report defects and drive closure through the STLC== using Jira and Azure DevOps.",
+            "==Define, monitor and report on SLAs== to ensure services meet agreed-upon performance and availability standards.",
+            "==Manage resources effectively ensuring on-time delivery== and ==identify, analyse and mitigate quality risks== at each phase of the software testing process.",
+            "==Perform SQL-based data validation and reconciliation== across subscription, billing and CRM systems — ETL-adjacent validation of marketplace data flows.",
+            "==Coordinate the work of junior QA engineers==, mentoring 2 juniors on testing activities, test-case reviews and defect validation."
+          ]
+        },
+        {
+          "title": "Tester",
+          "org": "Prohuman Technology Pvt. Ltd.",
+          "meta": "Aug 2023 – Mar 2024  |  Hyderabad, India  |  Customer Service · Web Application",
+          "bullets": [
+            "==Prepared test plans, estimation, test scenarios and test scripts== based on requirements; executed planned test cases and reported defects through STLC in Jira and Azure DevOps.",
+            "==Hands-on with test management tools== (Jira, Azure DevOps) and test automation tools (BrowserStack LCNC, ACCELQ).",
+            "==Performed API testing== (Postman) and ==database and ETL-style data validation== (SQL) across support workflows.",
+            "==Contributed to one or more processes and solutions== by delivering agreed activities, applying judgement and selecting appropriate methodologies."
+          ]
+        },
+        {
+          "title": "Software Engineer",
+          "org": "Allvy Software Solutions Pvt. Ltd.",
+          "meta": "Jan 2022 – Apr 2023  |  Andhra Pradesh, India  |  Government Portal",
+          "bullets": [
+            "==Prepared test scenarios, test cases and test data== from functional requirements; executed functional, regression, integration, system, API and security testing.",
+            "==Performed database validation and reconciliation== using SQL across portal modules.",
+            "Logged and tracked defects, ensuring closure through STLC; coordinated regression validation with developers."
+          ]
+        },
+        {
+          "title": "Software Engineer",
+          "org": "QTesters",
+          "meta": "Feb 2020 – Jan 2022  |  Hyderabad, India  |  Web · Mobile · ==E-commerce== · Blockchain",
+          "bullets": [
+            "==Performed end-to-end testing of e-commerce, retail and marketplace applications== — web and mobile — including checkout, payments and product flows.",
+            "==Prepared test cases, test scenarios and test data== for multiple client projects; executed REST API testing with Postman and REST Assured.",
+            "==Conducted cross-browser, cross-device and mobile (Android/iOS) compatibility testing==; reported defects in Jira."
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "EDUCATION",
+      "rows": [["B. Tech, Electronics and Communication Engineering", "Narayan Engineering College (JNTUA) · 2019"]]
+    },
+    {
+      "heading": "CERTIFICATIONS",
+      "bullets": [
+        "Learn Generative AI in Software Testing — Udemy",
+        "SQL (Basic) — HackerRank",
+        "Selenium WebDriver with Java - Basics to Advanced + Frameworks — Udemy",
+        "ACCELQ Automation Engineer & Certified ACCELQ Automation Expert — ACCELQ",
+        "Katalon Practitioner & Professional Level — Katalon"
+      ]
+    },
+    {
+      "heading": "STRENGTHS",
+      "bullets": [
+        "Team leadership, mentoring & individual-contributor depth",
+        "Strong communication — concise, clear articulation",
+        "SLA definition, monitoring & reporting",
+        "Risk identification, analysis & mitigation at each STLC phase"
+      ]
+    }
+  ]
+}

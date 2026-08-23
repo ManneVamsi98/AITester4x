@@ -1,0 +1,92 @@
+{
+  "output": "E:/AI Tester 4x/AI Tester 4x/Chapter_04_Jobkit_AI/output/Manne_Vamsi_RSM_SeniorAssociate_QE.docx",
+  "docTitle": "Manne Vamsi — Senior Associate – Quality Engineering",
+  "name": "MANNE VAMSI",
+  "title": "==MAS-QUALITY ENGINEERING - SENIOR ASSOCIATE==  ·  MANUAL & AUTOMATED TESTING  |  Hyderabad",
+  "contact": [
+    ["Tel: +91 8253456856", "Email: mannevamsi98@gmail.com"]
+  ],
+  "sections": [
+    {
+      "heading": "PROFILE SUMMARY",
+      "body": "QA Engineer with ==6+ years== of experience in both ==manual testing and automation testing== across enterprise SaaS and web platforms. ==Designed comprehensive test plans, test scenarios, and traceability matrices== from business requirements, and ==executed functional, integration, system, regression, and UAT== activities. ==Developed and maintained automated test suites== using code-based and codeless frameworks (Selenium WebDriver, TestNG, ACCELQ, BrowserStack LCNC), ==utilized AI to help develop automated test suites==, and ==integrated automated tests into CI/CD pipelines== (Azure DevOps). Experienced with Azure DevOps, Jira, Postman, and SQL."
+    },
+    {
+      "heading": "CORE SKILLS",
+      "rows": [
+        ["==Functional & Manual Testing==", "==Test plan & scenario design== · ==Traceability matrices== · ==UAT testing== · O2C / P2P / R2R / L2C ==[ERP business processes — fill-in]=="],
+        ["Testing Types", "Functional · Integration · System · Regression · ==User Acceptance Testing (UAT)== · Smoke · Sanity · Exploratory"],
+        ["==Test Automation==", "==Automated test suite development== · Selenium WebDriver · TestNG · BrowserStack LCNC · ACCELQ · ==[Leapwork / Playwright — fill-in]=="],
+        ["==Test Management==", "==Azure DevOps== · ==Jira== · Test plans, suites, cycles & defect workflows · Test metrics & status reports"],
+        ["==CI/CD==", "==CI/CD pipelines (Azure DevOps)=="],
+        ["==AI-Assisted Testing==", "==AI-assisted test design & automation== · Generative AI training (Udemy)"],
+        ["API & Databases", "Postman · REST Assured · SQL"]
+      ],
+      "note": "FILL-IN RULE — JD requires ERP platforms (Dynamics 365, SAP, Oracle, NetSuite, Salesforce). You have Salesforce and HubSpot integration testing, not full ERP process testing — reframe what you have, fill ERP brackets only with genuine ERP exposure, and note the gap in your cover note. Leapwork/Playwright brackets are for tools you have actually used."
+    },
+    {
+      "heading": "PROFESSIONAL EXPERIENCE",
+      "roles": [
+        {
+          "title": "Quality Specialist (==QA owner==)",
+          "org": "Uniquode Applications Specialists LLP",
+          "meta": "Apr 2024 – Present  |  Hyderabad  |  ==SaaS / CRM / cloud commerce==",
+          "bullets": [
+            "==Designed comprehensive test plans, test scenarios, test cases, and traceability matrices== from business requirements for a SaaS marketplace platform.",
+            "==Executed end-to-end testing== including ==functional, integration, system, regression, and UAT== activities across multiple releases.",
+            "==Developed, executed, and maintained automated test suites== using both codeless (BrowserStack LCNC) and code-based (Selenium/TestNG, ACCELQ) frameworks.",
+            "==Utilized AI== and generative AI training to ==help develop automated test suites== and improve test design.",
+            "==Integrated automated tests into CI/CD pipelines== (Azure DevOps) to support continuous testing.",
+            "==Created and managed test plans, test suites, test cycles, and defect workflows== in Azure DevOps and Jira; prepared ==testing metrics and status reports==.",
+            "==Validated complex business processes== including subscription management, private offers, billing, entitlement, and ==Salesforce / HubSpot CRM integrations==."
+          ]
+        },
+        {
+          "title": "Tester",
+          "org": "Prohuman Technology Pvt. Ltd.",
+          "meta": "Aug 2023 – Mar 2024  |  Hyderabad  |  Customer Service / Web",
+          "bullets": [
+            "==Created detailed test cases, test scripts, and test data== from business requirements for an agent portal.",
+            "==Executed functional, integration, system, regression, and UAT== testing in an Agile team of 8.",
+            "==Tracked defects through resolution== using Azure DevOps and Jira; supported release validation.",
+            "==Developed and maintained automated test suites== using BrowserStack LCNC and ACCELQ."
+          ]
+        },
+        {
+          "title": "Software Engineer",
+          "org": "Allvy Software Solutions Pvt. Ltd.",
+          "meta": "Jan 2022 – Apr 2023  |  Hyderabad  |  Government Portal",
+          "bullets": [
+            "Designed test scenarios, test cases, and test data from functional requirements.",
+            "==Executed functional, integration, system, regression, and security== testing.",
+            "Logged and tracked defects and coordinated regression validation with developers."
+          ]
+        },
+        {
+          "title": "Software Engineer",
+          "org": "QTesters",
+          "meta": "Feb 2020 – Jan 2022  |  Hyderabad  |  Web, Mobile, Blockchain & E-commerce",
+          "bullets": [
+            "Performed end-to-end functional, integration, and regression testing across web and mobile projects.",
+            "==Built automated regression suites== with Selenium and executed REST API testing (REST Assured, Postman).",
+            "==Tracked defects== in Jira and collaborated closely with development teams."
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "EDUCATION",
+      "rows": [["B.Tech Electronics and Communication Engineering", "Narayan Engineering College (JNTUA) · 2019"]]
+    },
+    {
+      "heading": "CERTIFICATIONS",
+      "bullets": [
+        "ACCELQ Automation Engineer & Certified ACCELQ Automation Expert",
+        "Selenium WebDriver with Java — Basics to Advanced + Frameworks — Udemy",
+        "Learn Generative AI in Software Testing — Udemy",
+        "Katalon Practitioner & Professional Level Certification",
+        "SQL (Basic) Certificate — HackerRank"
+      ]
+    }
+  ]
+}
