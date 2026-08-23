@@ -1,4 +1,4 @@
-# Manne Vamsi
+# Vamsi Manne 
 
 Tel: +91 8253456856 | Email: mannevamsi98@gmail.com
 
