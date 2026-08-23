@@ -1,6 +1,6 @@
 # Vamsi Manne 
 
-Tel: +91 8253456856 | Email: mannevamsi98@gmail.com
+Tel: +91 8374182756 | Email: mannevamsi98@gmail.com
 
 > **Tailored for: Quality Engineer (Accenture-Affinity style) — Generative AI / Python | Hyderabad**
 
