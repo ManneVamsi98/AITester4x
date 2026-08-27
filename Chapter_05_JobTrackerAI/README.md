@@ -1,4 +1,4 @@
-# Job Tracker AI
+# My Job Tracker AI Buddy
 
 A cloud-synced Kanban job tracker built with React + Vite + Tailwind CSS.
 Data is stored in **Supabase** (Postgres), so your board is the same in every browser and protected behind **email/password login**. When hosted (e.g. on Vercel), the app works identically — no manual backups needed for normal use.

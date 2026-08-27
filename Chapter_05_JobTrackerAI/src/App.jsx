@@ -282,7 +282,7 @@ export default function App() {
         <div className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-sm font-bold text-white">JT</div>
           <div>
-            <h1 className="text-base font-bold leading-tight">Job Tracker</h1>
+            <h1 className="text-base font-bold leading-tight">My Job Tracker AI Buddy</h1>
             <p className="text-xs text-slate-400 dark:text-slate-500">Synced · {jobs.length} job{jobs.length === 1 ? '' : 's'}</p>
           </div>
         </div>
@@ -478,7 +478,7 @@ function LoginScreen() {
       <div className="w-full max-w-sm rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <div className="mb-5 flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-sm font-bold text-white">JT</div>
-          <h1 className="text-base font-bold">Job Tracker</h1>
+          <h1 className="text-base font-bold">My Job Tracker AI Buddy</h1>
         </div>
         <form onSubmit={handleSubmit} className="space-y-3">
           <div>
