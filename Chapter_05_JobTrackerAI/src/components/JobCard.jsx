@@ -21,6 +21,19 @@ function formatDate(dateStr) {
   return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
+function followUpStatus(dateStr) {
+  if (!dateStr) return null
+  const d = new Date(dateStr + 'T00:00:00')
+  if (isNaN(d)) return null
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const diff = Math.round((d.getTime() - today.getTime()) / 86400000)
+  if (diff < 0) return { label: `Overdue by ${-diff}d`, tone: 'red' }
+  if (diff === 0) return { label: 'Due today', tone: 'amber' }
+  if (diff <= 7) return { label: `Follow up in ${diff}d`, tone: 'amber' }
+  return { label: `Follow up ${formatDate(dateStr)}`, tone: 'slate' }
+}
+
 function LinkedInIcon() {
   return (
     <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden="true">
@@ -32,6 +45,8 @@ function LinkedInIcon() {
 export default function JobCard({ job, onEdit }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: job.id })
   const accent = STATUS_ACCENT[job.status] || STATUS_ACCENT.wishlist
+  const reminder = followUpStatus(job.followUpDate)
+  const isOverdue = reminder?.tone === 'red'
 
   return (
     <div
@@ -40,6 +55,8 @@ export default function JobCard({ job, onEdit }) {
       {...attributes}
       {...listeners}
       className={`group cursor-grab rounded-md border border-slate-200 border-l-4 ${accent.border} bg-white p-3 shadow-sm transition hover:shadow dark:border-slate-700 dark:bg-slate-800 ${
+        isOverdue ? 'ring-1 ring-rose-400/60' : ''
+      } ${
         isDragging ? 'z-10 opacity-60 shadow-lg ring-2 ring-blue-500' : ''
       }`}
     >
@@ -86,6 +103,40 @@ export default function JobCard({ job, onEdit }) {
         </span>
         {job.salary && <span className="truncate">{job.salary}</span>}
       </div>
+
+      {job.skills && (
+        <div className="mt-2 flex flex-wrap gap-1">
+          {job.skills
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean)
+            .slice(0, 4)
+            .map((s) => (
+              <span key={s} className="rounded bg-sky-50 px-1.5 py-0.5 text-[10px] font-medium text-sky-700 dark:bg-sky-950 dark:text-sky-400">
+                {s}
+              </span>
+            ))}
+        </div>
+      )}
+
+      {reminder && (
+        <div className="mt-2">
+          <span
+            className={`inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[11px] font-medium ${
+              reminder.tone === 'red'
+                ? 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-400'
+                : reminder.tone === 'amber'
+                ? 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400'
+                : 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300'
+            }`}
+          >
+            <svg viewBox="0 0 24 24" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0" />
+            </svg>
+            {reminder.label}
+          </span>
+        </div>
+      )}
 
       <div className="mt-2 flex items-center justify-between">
         <span className={`inline-flex items-center gap-1 text-[11px] font-medium ${accent.text}`}>

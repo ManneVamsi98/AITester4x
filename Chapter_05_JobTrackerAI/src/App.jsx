@@ -13,8 +13,10 @@ import KanbanColumn from './components/KanbanColumn.jsx'
 import JobForm from './components/JobForm.jsx'
 import Modal from './components/Modal.jsx'
 import JobCard from './components/JobCard.jsx'
+import SkillsInsights from './components/SkillsInsights.jsx'
 import { STATUSES, STATUS_ORDER } from './constants.js'
-import { getAllJobs, putJob, deleteJob, importJobs } from './db.js'
+import { getAllJobs, putJob, deleteJob, importJobs, migrateLocalToCloud } from './db.js'
+import { signIn, signUp, signOut, getSession, onAuthStateChange, isSupabaseConfigured } from './auth.js'
 import { exportJSON, readJSONFile } from './utils/io.js'
 
 const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -38,17 +40,48 @@ export default function App() {
   const [dateFilter, setDateFilter] = useState({ year: '', month: '', day: '' })
   const [modal, setModal] = useState(null) // { mode: 'add'|'edit', status?, job? }
   const [confirmDelete, setConfirmDelete] = useState(null)
+  const [showSkills, setShowSkills] = useState(false)
   const [activeId, setActiveId] = useState(null)
   const [dark, setDark] = useState(() => window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false)
   const [overColumn, setOverColumn] = useState(null)
+  const [session, setSession] = useState(null)
+  const [authReady, setAuthReady] = useState(false)
   const fileRef = useRef(null)
 
   useEffect(() => {
-    getAllJobs().then((rows) => {
-      setJobs(rows)
-      setLoaded(true)
+    if (!isSupabaseConfigured) {
+      setAuthReady(true)
+      return
+    }
+    getSession().then(({ data }) => {
+      setSession(data.session)
+      setAuthReady(true)
     })
+    const unsubscribe = onAuthStateChange((s) => {
+      setSession(s)
+      setAuthReady(true)
+    })
+    return unsubscribe
   }, [])
+
+  useEffect(() => {
+    if (!isSupabaseConfigured || !session) {
+      setLoaded(false)
+      return
+    }
+    let cancelled = false
+    migrateLocalToCloud().then(() => {
+      if (cancelled) return
+      return getAllJobs().then((rows) => {
+        if (cancelled) return
+        setJobs(rows)
+        setLoaded(true)
+      })
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [session])
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', dark)
@@ -208,6 +241,32 @@ export default function App() {
 
   const activeJob = jobs.find((j) => j.id === activeId)
 
+  if (!authReady) {
+    return (
+      <div className="flex h-full items-center justify-center text-sm text-slate-500 dark:text-slate-400">
+        Loading…
+      </div>
+    )
+  }
+
+  if (!isSupabaseConfigured) {
+    return (
+      <div className="flex h-full items-center justify-center p-8">
+        <div className="max-w-md rounded-lg border border-slate-200 bg-white p-6 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <h1 className="text-base font-bold">Job Tracker</h1>
+          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+            Supabase is not configured. Add <code className="rounded bg-slate-100 px-1 py-0.5 text-xs dark:bg-slate-800">VITE_SUPABASE_URL</code> and{' '}
+            <code className="rounded bg-slate-100 px-1 py-0.5 text-xs dark:bg-slate-800">VITE_SUPABASE_ANON_KEY</code> to a <code className="rounded bg-slate-100 px-1 py-0.5 text-xs dark:bg-slate-800">.env</code> file, then restart the dev server.
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!session) {
+    return <LoginScreen />
+  }
+
   if (!loaded) {
     return (
       <div className="flex h-full items-center justify-center text-sm text-slate-500 dark:text-slate-400">
@@ -224,7 +283,7 @@ export default function App() {
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-sm font-bold text-white">JT</div>
           <div>
             <h1 className="text-base font-bold leading-tight">Job Tracker</h1>
-            <p className="text-xs text-slate-400 dark:text-slate-500">Local-first · {jobs.length} job{jobs.length === 1 ? '' : 's'}</p>
+            <p className="text-xs text-slate-400 dark:text-slate-500">Synced · {jobs.length} job{jobs.length === 1 ? '' : 's'}</p>
           </div>
         </div>
 
@@ -249,6 +308,12 @@ export default function App() {
           </button>
           <button onClick={handleExport} title="Export all jobs as JSON" className="rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800">
             Export
+          </button>
+          <button onClick={() => setShowSkills(true)} title="Analyze skills across your jobs" className="rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800">
+            Skills
+          </button>
+          <button onClick={() => signOut()} title="Sign out" className="rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800">
+            Sign out
           </button>
           <button
             onClick={() => setDark((d) => !d)}
@@ -381,6 +446,85 @@ export default function App() {
           </div>
         </Modal>
       )}
+
+      {showSkills && <SkillsInsights jobs={jobs} onClose={() => setShowSkills(false)} />}
+    </div>
+  )
+}
+
+function LoginScreen() {
+  const [mode, setMode] = useState('signin')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [busy, setBusy] = useState(false)
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    setError('')
+    setBusy(true)
+    try {
+      if (mode === 'signin') await signIn(email.trim(), password)
+      else await signUp(email.trim(), password)
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <div className="flex h-full items-center justify-center bg-slate-50 px-4 dark:bg-slate-950">
+      <div className="w-full max-w-sm rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <div className="mb-5 flex items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-sm font-bold text-white">JT</div>
+          <h1 className="text-base font-bold">Job Tracker</h1>
+        </div>
+        <form onSubmit={handleSubmit} className="space-y-3">
+          <div>
+            <label className="mb-1 block text-xs font-medium text-slate-500 dark:text-slate-400">Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              autoFocus
+              className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100"
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-slate-500 dark:text-slate-400">Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={6}
+              className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100"
+            />
+          </div>
+          {error && <p className="text-xs text-rose-500">{error}</p>}
+          <button
+            type="submit"
+            disabled={busy}
+            className="w-full rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+          >
+            {busy ? 'Please wait…' : mode === 'signin' ? 'Sign in' : 'Create account'}
+          </button>
+        </form>
+        <p className="mt-4 text-center text-xs text-slate-500 dark:text-slate-400">
+          {mode === 'signin' ? "Don't have an account? " : 'Already have an account? '}
+          <button
+            onClick={() => {
+              setMode((m) => (m === 'signin' ? 'signup' : 'signin'))
+              setError('')
+            }}
+            className="font-medium text-blue-600 hover:underline dark:text-blue-400"
+          >
+            {mode === 'signin' ? 'Sign up' : 'Sign in'}
+          </button>
+        </p>
+      </div>
     </div>
   )
 }

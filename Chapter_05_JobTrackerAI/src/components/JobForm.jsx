@@ -13,7 +13,9 @@ export default function JobForm({ initial, resumeNames, onSubmit, onCancel, onDe
     url: '',
     resume: '',
     dateApplied: new Date().toISOString().slice(0, 10),
+    followUpDate: '',
     salary: '',
+    skills: '',
     notes: '',
     status: 'wishlist',
     ...initial,
@@ -28,7 +30,9 @@ export default function JobForm({ initial, resumeNames, onSubmit, onCancel, onDe
       url: '',
       resume: '',
       dateApplied: new Date().toISOString().slice(0, 10),
+      followUpDate: '',
       salary: '',
+      skills: '',
       notes: '',
       status: 'wishlist',
       ...initial,
@@ -92,6 +96,10 @@ export default function JobForm({ initial, resumeNames, onSubmit, onCancel, onDe
           {errors.dateApplied && <p className="mt-1 text-xs text-rose-500">{errors.dateApplied}</p>}
         </div>
         <div>
+          <label className={labelCls}>Follow-up date (reminder)</label>
+          <input type="date" className={inputCls} value={form.followUpDate} onChange={set('followUpDate')} />
+        </div>
+        <div>
           <label className={labelCls}>Salary range</label>
           <input className={inputCls} value={form.salary} onChange={set('salary')} placeholder="₹25-30 LPA" />
         </div>
@@ -107,15 +115,21 @@ export default function JobForm({ initial, resumeNames, onSubmit, onCancel, onDe
         </div>
       </div>
 
-      <div>
-        <label className={labelCls}>Notes</label>
-        <textarea
-          className={`${inputCls} resize-y`}
-          rows={3}
-          value={form.notes}
-          onChange={set('notes')}
-          placeholder="Recruiter name, referral info, interview tips…"
-        />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className={labelCls}>Skills required</label>
+          <input className={inputCls} value={form.skills} onChange={set('skills')} placeholder="e.g. Selenium, Java, API testing" />
+        </div>
+        <div>
+          <label className={labelCls}>Notes</label>
+          <textarea
+            className={`${inputCls} resize-y`}
+            rows={1}
+            value={form.notes}
+            onChange={set('notes')}
+            placeholder="Recruiter name, referral info, interview tips…"
+          />
+        </div>
       </div>
 
       <div className="flex items-center justify-between gap-2 pt-1">
