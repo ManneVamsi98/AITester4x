@@ -41,6 +41,7 @@ export default function App() {
   const [modal, setModal] = useState(null) // { mode: 'add'|'edit', status?, job? }
   const [confirmDelete, setConfirmDelete] = useState(null)
   const [showSkills, setShowSkills] = useState(false)
+  const [syncError, setSyncError] = useState('')
   const [activeId, setActiveId] = useState(null)
   const [dark, setDark] = useState(() => window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false)
   const [overColumn, setOverColumn] = useState(null)
@@ -206,11 +207,11 @@ export default function App() {
     if (modal.mode === 'edit' && modal.job) {
       const updated = { ...modal.job, ...form }
       setJobs((prev) => prev.map((j) => (j.id === updated.id ? updated : j)))
-      putJob(updated)
+      putJob(updated).then((ok) => setSyncError(ok ? '' : 'Saved locally, but failed to sync to cloud'))
     } else {
       const job = { id: uid(), ...form }
       setJobs((prev) => [...prev, job])
-      putJob(job)
+      putJob(job).then((ok) => setSyncError(ok ? '' : 'Saved locally, but failed to sync to cloud'))
     }
     setModal(null)
   }
@@ -218,7 +219,7 @@ export default function App() {
   function handleDelete() {
     if (!confirmDelete) return
     setJobs((prev) => prev.filter((j) => j.id !== confirmDelete))
-    deleteJob(confirmDelete)
+    deleteJob(confirmDelete).then((ok) => setSyncError(ok ? '' : 'Deleted locally, but failed to remove from cloud'))
     setConfirmDelete(null)
   }
 
@@ -232,8 +233,9 @@ export default function App() {
     if (!file) return
     try {
       const data = await readJSONFile(file)
-      await importJobs(data)
+      const ok = await importJobs(data)
       setJobs(await getAllJobs())
+      setSyncError(ok ? '' : 'Imported locally, but failed to sync to cloud')
     } catch (err) {
       alert(err.message || 'Import failed')
     }
@@ -384,6 +386,13 @@ export default function App() {
             : ''}
         </span>
       </div>
+
+      {syncError && (
+        <div className="border-b border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-800 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-300">
+          <span className="font-medium">Sync warning:</span> {syncError}. Your data is safe locally, but it won&apos;t appear on other devices until the cloud sync succeeds.
+          <button onClick={() => setSyncError('')} className="ml-2 font-semibold underline">Dismiss</button>
+        </div>
+      )}
 
       {/* Board */}
       <main className="flex flex-1 gap-4 overflow-x-auto overflow-y-hidden p-4">

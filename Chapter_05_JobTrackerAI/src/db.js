@@ -59,18 +59,26 @@ export async function getAllJobs() {
 
 export async function putJob(job) {
   putLocal(job).catch(() => {}) // best-effort mirror
-  if (!isSupabaseConfigured || !supabase) return
+  if (!isSupabaseConfigured || !supabase) return false
   const uid = await userId()
-  if (!uid) return
+  if (!uid) return false
   const { error } = await supabase.from(TABLE).upsert({ ...job, user_id: uid }, { onConflict: 'id' })
-  if (error) console.error('Failed to save job to cloud:', error.message)
+  if (error) {
+    console.error('Failed to save job to cloud:', error.message)
+    return false
+  }
+  return true
 }
 
 export async function deleteJob(id) {
   deleteLocal(id).catch(() => {})
-  if (!isSupabaseConfigured || !supabase) return
+  if (!isSupabaseConfigured || !supabase) return false
   const { error } = await supabase.from(TABLE).delete().eq('id', id)
-  if (error) console.error('Failed to delete job from cloud:', error.message)
+  if (error) {
+    console.error('Failed to delete job from cloud:', error.message)
+    return false
+  }
+  return true
 }
 
 export async function importJobs(jobs) {
@@ -85,9 +93,9 @@ export async function importJobs(jobs) {
   }
   await tx.done
 
-  if (!isSupabaseConfigured || !supabase) return
+  if (!isSupabaseConfigured || !supabase) return false
   const uid = await userId()
-  if (!uid) return
+  if (!uid) return false
   const rows = jobs
     .filter((j) => j && j.id)
     .map((j) => ({
@@ -96,7 +104,11 @@ export async function importJobs(jobs) {
       user_id: uid,
     }))
   const { error } = await supabase.from(TABLE).upsert(rows, { onConflict: 'id' })
-  if (error) console.error('Failed to import jobs to cloud:', error.message)
+  if (error) {
+    console.error('Failed to import jobs to cloud:', error.message)
+    return false
+  }
+  return true
 }
 
 // One-time upload of existing local IndexedDB jobs into the cloud.
