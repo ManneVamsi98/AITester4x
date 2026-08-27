@@ -17,6 +17,16 @@ import { STATUSES, STATUS_ORDER } from './constants.js'
 import { getAllJobs, putJob, deleteJob, importJobs } from './db.js'
 import { exportJSON, readJSONFile } from './utils/io.js'
 
+const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+function monthLabel(ym) {
+  const [y, m] = ym.split('-')
+  return `${MONTH_NAMES[Number(m) - 1] || m} ${y}`
+}
+
+const filterSelectCls =
+  'rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200'
+
 function uid() {
   return (crypto.randomUUID ? crypto.randomUUID() : 'id-' + Date.now() + '-' + Math.random().toString(16).slice(2))
 }
@@ -25,6 +35,7 @@ export default function App() {
   const [jobs, setJobs] = useState([])
   const [loaded, setLoaded] = useState(false)
   const [search, setSearch] = useState('')
+  const [dateFilter, setDateFilter] = useState({ year: '', month: '', day: '' })
   const [modal, setModal] = useState(null) // { mode: 'add'|'edit', status?, job? }
   const [confirmDelete, setConfirmDelete] = useState(null)
   const [activeId, setActiveId] = useState(null)
@@ -48,13 +59,55 @@ export default function App() {
     [jobs],
   )
 
+  const datedJobs = useMemo(
+    () => jobs.filter((j) => j.dateApplied && /^\d{4}-\d{2}-\d{2}$/.test(j.dateApplied)),
+    [jobs],
+  )
+
+  const years = useMemo(
+    () => [...new Set(datedJobs.map((j) => j.dateApplied.slice(0, 4)))].sort((a, b) => b - a),
+    [datedJobs],
+  )
+
+  const months = useMemo(
+    () =>
+      dateFilter.year
+        ? [...new Set(datedJobs.map((j) => j.dateApplied.slice(0, 7)).filter((m) => m.startsWith(dateFilter.year)))].sort()
+        : [],
+    [datedJobs, dateFilter.year],
+  )
+
+  const days = useMemo(
+    () =>
+      dateFilter.month
+        ? [...new Set(datedJobs.map((j) => j.dateApplied).filter((d) => d.startsWith(dateFilter.month)))].sort()
+        : [],
+    [datedJobs, dateFilter.month],
+  )
+
+  // If the selected year/month/day no longer exists in the data, drop the stale selection.
+  useEffect(() => {
+    if (dateFilter.year && !years.includes(dateFilter.year)) {
+      setDateFilter({ year: '', month: '', day: '' })
+    } else if (dateFilter.month && !months.includes(dateFilter.month)) {
+      setDateFilter((d) => ({ ...d, month: '', day: '' }))
+    } else if (dateFilter.day && !days.includes(dateFilter.day)) {
+      setDateFilter((d) => ({ ...d, day: '' }))
+    }
+  }, [dateFilter.year, dateFilter.month, dateFilter.day, years, months, days])
+
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()
-    if (!q) return jobs
-    return jobs.filter(
-      (j) => j.company.toLowerCase().includes(q) || j.role.toLowerCase().includes(q),
-    )
-  }, [jobs, search])
+    const d = dateFilter
+    const matchesDate = (j) =>
+      (!d.year || j.dateApplied?.startsWith(d.year)) &&
+      (!d.month || j.dateApplied?.startsWith(d.month)) &&
+      (!d.day || j.dateApplied === d.day)
+    return jobs.filter((j) => {
+      const matchesSearch = !q || j.company.toLowerCase().includes(q) || j.role.toLowerCase().includes(q)
+      return matchesSearch && matchesDate(j)
+    })
+  }, [jobs, search, dateFilter])
 
   const columns = useMemo(() => {
     const map = Object.fromEntries(STATUS_ORDER.map((s) => [s, []]))
@@ -218,6 +271,54 @@ export default function App() {
           </button>
         </div>
       </header>
+
+      {/* Date filter bar */}
+      <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 bg-white px-4 py-2 dark:border-slate-800 dark:bg-slate-900">
+        <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Filter by date</span>
+        <select
+          className={filterSelectCls}
+          value={dateFilter.year}
+          onChange={(e) => setDateFilter({ year: e.target.value, month: '', day: '' })}
+        >
+          <option value="">All years</option>
+          {years.map((y) => (
+            <option key={y} value={y}>{y}</option>
+          ))}
+        </select>
+        <select
+          className={filterSelectCls}
+          value={dateFilter.month}
+          onChange={(e) => setDateFilter((d) => ({ ...d, month: e.target.value, day: '' }))}
+        >
+          <option value="">All months</option>
+          {months.map((m) => (
+            <option key={m} value={m}>{monthLabel(m)}</option>
+          ))}
+        </select>
+        <select
+          className={filterSelectCls}
+          value={dateFilter.day}
+          onChange={(e) => setDateFilter((d) => ({ ...d, day: e.target.value }))}
+        >
+          <option value="">All days</option>
+          {days.map((dd) => (
+            <option key={dd} value={dd}>{dd}</option>
+          ))}
+        </select>
+        {(dateFilter.year || dateFilter.month || dateFilter.day) && (
+          <button
+            onClick={() => setDateFilter({ year: '', month: '', day: '' })}
+            className="rounded-md px-2 py-1.5 text-sm font-medium text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-950"
+          >
+            Clear
+          </button>
+        )}
+        <span className="ml-auto text-xs text-slate-500 dark:text-slate-400">
+          {search || dateFilter.year || dateFilter.month || dateFilter.day
+            ? `Showing ${filtered.length} of ${jobs.length} job${jobs.length === 1 ? '' : 's'}`
+            : ''}
+        </span>
+      </div>
 
       {/* Board */}
       <main className="flex flex-1 gap-4 overflow-x-auto overflow-y-hidden p-4">

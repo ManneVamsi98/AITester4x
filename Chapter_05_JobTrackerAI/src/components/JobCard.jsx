@@ -14,6 +14,13 @@ function daysSince(dateStr) {
   return `${days}d ago`
 }
 
+function formatDate(dateStr) {
+  if (!dateStr) return null
+  const d = new Date(dateStr + 'T00:00:00')
+  if (isNaN(d)) return null
+  return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
+}
+
 function LinkedInIcon() {
   return (
     <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden="true">
@@ -65,12 +72,17 @@ export default function JobCard({ job, onEdit }) {
             {job.resume}
           </span>
         )}
-        <span className="inline-flex items-center gap-1">
-          <svg viewBox="0 0 24 24" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="2">
-            <rect x="3" y="4" width="18" height="18" rx="2" />
-            <path d="M16 2v4M8 2v4M3 10h18" />
-          </svg>
-          {daysSince(job.dateApplied) || '—'}
+        <span className="inline-flex flex-col leading-tight">
+          <span className="inline-flex items-center gap-1">
+            <svg viewBox="0 0 24 24" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" />
+              <path d="M16 2v4M8 2v4M3 10h18" />
+            </svg>
+            {formatDate(job.dateApplied) || '—'}
+          </span>
+          {daysSince(job.dateApplied) && (
+            <span className="pl-4 text-[10px] text-slate-400 dark:text-slate-500">({daysSince(job.dateApplied)})</span>
+          )}
         </span>
         {job.salary && <span className="truncate">{job.salary}</span>}
       </div>
