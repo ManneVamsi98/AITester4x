@@ -1,0 +1,15 @@
+{
+  "key": "VWO-49",
+  "url": "https://vwo.atlassian.net/browse/VWO-49",
+  "summary": "Add cancellation flow to booking widget",
+  "description": "## Overview\nAs a user, I want to cancel a booking from the widget so that my account is not charged.\n\n### Acceptance criteria\n- AC1: Users with a valid booking id can cancel\n- AC2: A cancelled booking shows status 'cancelled'\n- AC3: Cancellation is irreversible\n\n- Existing integration: payments API\n- Priority: Must",
+  "acceptance_criteria": "AC1: Users with a valid booking id can cancel\nAC2: A cancelled booking shows status 'cancelled'\nAC3: Cancellation is irreversible",
+  "status": "In Progress",
+  "issue_type": "Story",
+  "priority": "High",
+  "labels": ["payments", "p1"],
+  "components": ["Booking Service"],
+  "assignee": "Vamsi",
+  "created": "2026-08-01T10:00:00.000+0000",
+  "updated": "2026-08-20T10:00:00.000+0000"
+}
