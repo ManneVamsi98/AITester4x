@@ -1,0 +1,152 @@
+{
+  "name": "01_FetchJIRATicket_AIAgent",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "b5f16c0f-4835-48fd-a8d2-43cf7e68b2b5",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "e24a04c1-6be1-49db-976b-42544827f506"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "d314e6f4-42a6-45bc-baba-1acd0897800c",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        384,
+        0
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "bd7aab32-30b0-4955-873d-f0c697053234",
+      "name": "Simple Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        400,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "issueKey": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Issue_Key', ``, 'string') }}",
+        "additionalFields": {
+          "fields": "summary,status,assignee,priority,issuetype,created,updated,labels"
+        }
+      },
+      "id": "50c49a39-dfeb-4b20-ab0c-95bdedac12be",
+      "name": "Get an issue in Jira Software",
+      "type": "n8n-nodes-base.jiraTool",
+      "typeVersion": 1,
+      "position": [
+        544,
+        208
+      ],
+      "credentials": {
+        "jiraSoftwareCloudApi": {
+          "id": "zyMi4GKTalHDHkyj",
+          "name": "Jira SW Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        256,
+        208
+      ],
+      "id": "766fccce-1899-4f8e-aa01-22d92856da3d",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get an issue in Jira Software": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "6ba3381d-4b43-4103-ab1e-dc65b1356819",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4a9cd20779731114053eeacffeada0ce6a101d8e655a6510586ca8037f57f455"
+  },
+  "nodeGroups": [],
+  "id": "yUJi9OsWRiDNz2Hn",
+  "tags": []
+}
