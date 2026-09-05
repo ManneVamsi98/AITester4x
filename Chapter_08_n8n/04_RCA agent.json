@@ -1,0 +1,585 @@
+{
+  "name": "RCA agent",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "5d4aeced-a6e6-4ff5-b5df-245cc63c8186",
+      "name": "When chat message received",
+      "webhookId": "c2d3ca6c-32ca-43ae-9846-87a6432eded6"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        256,
+        208
+      ],
+      "id": "b482a44f-3ed9-44dd-859c-c76ffedaf83d",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "# Jira Production Bug → Automatic RCA Excel Generator\n\nYou are a senior n8n automation architect, Jira integration engineer, QA lead, and AI workflow developer.\n\nBuild a complete, production-ready n8n workflow from scratch with the following name:\n\n`Jira Production Bug → Automatic RCA Excel Generator`\n\nDo not only explain the workflow. Create the complete workflow with all nodes, expressions, connections, error branches, field mappings, prompts, structured output schemas, retry behavior, and setup notes.\n\nThe workflow must be importable into and editable within n8n.\n\n## TARGET GOOGLE SHEET — \"RCA Sheet\" (MASTER TEMPLATE)\n\nAll RCA data must be uploaded into the Google Sheet titled **RCA Sheet** at:\n\nhttps://docs.google.com/spreadsheets/d/1NNCxgyHaXjt0PJFvVAgtUvOB_X4mmzHiVDCUxTrbJCc/edit?gid=0#gid=0\n\nGoogle Drive file ID: `1NNCxgyHaXjt0PJFvVAgtUvOB_X4mmzHiVDCUxTrbJCc`\n\nRequired behavior:\n\n1. Treat this file as the read-only **master template**. Never write directly into the original file.\n2. On every new Jira production bug, use Google Drive **Copy File** to create a per-issue copy of this master (destination: `RCA_GOOGLE_SHEETS_FOLDER_ID`). Preserve the native Google Sheet format so all existing formatting, formulas, dropdowns, colors, conditional formatting, and worksheets are retained. Do not recreate the visual design during execution.\n3. Upload all RCA data into the **copy** (not the original master). For subsequent updates of the same Jira key, reuse the same copied workbook (tracked via the audit store) and increment `rca_version`; never create a duplicate copy.\n4. The linked master currently contains a **header row followed by one sample data row** on its worksheets. Google Sheets writer nodes must: preserve headers and formatting, clear the sample/data rows from the dynamic ranges before each write (see `Google Sheets - Clear Dynamic RCA Rows`), then write real RCA data starting at the correct first data row.\n5. At setup time, open the linked file and verify the actual worksheet layout before activating the workflow. If a worksheet uses the fixed `RCA Summary` cell map (`B6` … `H46`) described below, write to those exact cells. If a worksheet is a flat table with a header row and sample row, preserve the header, clear the sample, and write data rows below it. Never assume the fixed cell map when the template's own worksheets are flat tables.\n6. Export the completed copy as Microsoft Excel `.xlsx` and store it in `RCA_EXCEL_FOLDER_ID` when `EXPORT_XLSX` is true.\n\n## OBJECTIVE\n\nWhenever a Jira issue is created or updated and matches the configured Production Bug JQL:\n\n1. Trigger the n8n workflow automatically.\n2. Retrieve the complete Jira issue.\n3. Retrieve available comments, attachments metadata, linked issues, and relevant fields.\n4. Verify that the issue still matches the Production Bug JQL.\n5. Prevent duplicate or unnecessary RCA executions.\n6. Generate an evidence-based Root Cause Analysis.\n7. Copy the existing \"RCA Sheet\" Google Sheets template (URL and file ID above; set `RCA_TEMPLATE_FILE_ID` to `1NNCxgyHaXjt0PJFvVAgtUvOB_X4mmzHiVDCUxTrbJCc`).\n8. Populate the copied template while preserving its formatting, formulas, dropdowns, colors, and worksheets.\n9. Export the completed Google Sheet as a Microsoft Excel `.xlsx` file.\n10. Store the Google Sheet and Excel file in the configured Google Drive folders.\n11. Update an audit table so future Jira updates modify the existing RCA instead of creating duplicates.\n12. Handle individual failures without losing the complete execution record.\n\n## IMPORTANT ARCHITECTURE RULE\n\nUse deterministic n8n nodes for:\n\n* Jira retrieval\n* JQL verification\n* Deduplication\n* Google Drive file copying\n* Google Sheets writing\n* Excel export\n* Audit logging\n* Error handling\n\nUse the AI Agent only for generating the structured RCA analysis.\n\nDo not connect Jira and Google Sheets as autonomous AI tools. The agent must not decide whether a ticket should be fetched or whether a spreadsheet should be written.\n\n## CONFIGURATION VARIABLES\n\nCreate a `Workflow Configuration` Set node containing these placeholders:\n\n```text\nJIRA_BASE_URL=https://YOUR-COMPANY.atlassian.net\n\nPRODUCTION_BUG_JQL=project = VWO\nAND issuetype = Bug\nAND labels = \"production-bug\"\nAND statusCategory != Done\n\nRCA_TEMPLATE_FILE_ID=1NNCxgyHaXjt0PJFvVAgtUvOB_X4mmzHiVDCUxTrbJCc\n\nRCA_GOOGLE_SHEETS_FOLDER_ID=REPLACE_WITH_OUTPUT_FOLDER_ID\n\nRCA_EXCEL_FOLDER_ID=REPLACE_WITH_XLSX_OUTPUT_FOLDER_ID\n\nRCA_AUDIT_SHEET_ID=REPLACE_WITH_STANDALONE_AUDIT_SPREADSHEET_FILE_ID\n\nEXPORT_XLSX=true\n\nADD_JIRA_COMMENT=false\n\nAI_MODEL=gpt-5.4\n\nAI_TEMPERATURE=0.1\n\nMAX_RCA_ACTIONS=10\n```\n\nKeep the JQL easy to change.\n\nSetup notes:\n\n* `RCA_TEMPLATE_FILE_ID` is pre-filled with the \"RCA Sheet\" master template file ID (`1NNCxgyHaXjt0PJFvVAgtUvOB_X4mmzHiVDCUxTrbJCc`). Verify the file is shared with the service account / Google credential the workflow uses.\n* `RCA_AUDIT_SHEET_ID` is a **standalone audit spreadsheet** created once by the user (recommended store for the audit table). It must contain one worksheet named `RCA Audit` with the audit schema below. Keeping it separate from the RCA workbooks means template copies stay clean.\n* `labels = \"production-bug\"` is the recommended reliable identifier. If the Jira instance uses an Environment field or custom field, the user may replace the JQL with something such as:\n\n```text\nproject = VWO\nAND issuetype = Bug\nAND (\n  labels in (\"production-bug\", \"prod\")\n  OR environment ~ \"production\"\n)\nAND statusCategory != Done\n```\n\nDo not assume that a custom field exists.\n\n## TEMPLATE REQUIREMENT\n\nBefore activating the workflow, the user will:\n\n1. Upload the template to Google Drive (the \"RCA Sheet\" file above is the master).\n2. Open or convert it as a native Google Sheet.\n3. Rename its first worksheet to `RCA Summary`.\n4. Put its Google Drive file ID in `RCA_TEMPLATE_FILE_ID` (already set to `1NNCxgyHaXjt0PJFvVAgtUvOB_X4mmzHiVDCUxTrbJCc`).\n\nThe native template must contain these worksheets:\n\n* `RCA Summary`\n* `5 Whys`\n* `Timeline`\n* `Actions`\n* `Evidence & Validation`\n* `Blank RCA Template`\n* `Lists`\n\nThe linked master currently contains a header row plus one sample data row (added to demonstrate the expected format). During setup, confirm which worksheets follow the fixed `RCA Summary` cell map versus the flat header + sample layout, and configure the writer nodes accordingly (see \"TARGET GOOGLE SHEET\" section). Do not recreate the visual design during every execution. Copy the template so the existing formatting is preserved.\n\n## REQUIRED WORKFLOW\n\nBuild and connect these nodes in this order.\n\n### 1. Jira Trigger\n\nNode name:\n\n`Jira Trigger - Production Bug Event`\n\nUse the Jira Trigger node.\n\nListen for:\n\n* Issue Created\n* Issue Updated\n\nIf the Jira Trigger exposes JQL filtering, apply `PRODUCTION_BUG_JQL` at the trigger level.\n\nIf it does not expose JQL filtering, allow the event through and enforce JQL using the later verification node.\n\nThe trigger must capture:\n\n* Jira key\n* Event type\n* Event timestamp\n* Changelog when available\n* Triggering user\n* Issue ID\n\n### 2. Workflow Configuration\n\nNode name:\n\n`Workflow Configuration`\n\nStore all configuration placeholders in this node.\n\n### 3. Normalize Trigger Payload\n\nNode name:\n\n`Normalize Jira Event`\n\nUse a Set or Code node to produce:\n\n```json\n{\n  \"jira_key\": \"\",\n  \"jira_issue_id\": \"\",\n  \"webhook_event\": \"\",\n  \"event_timestamp\": \"\",\n  \"triggered_by\": \"\",\n  \"workflow_run_id\": \"\",\n  \"received_at\": \"\"\n}\n```\n\nUse the n8n execution ID as `workflow_run_id`.\n\n### 4. Get Complete Jira Issue\n\nNode name:\n\n`Jira - Get Complete Issue`\n\nRetrieve the issue using `jira_key`.\n\nRequest all available relevant fields:\n\n* Key\n* Summary\n* Description\n* Issue type\n* Project\n* Status\n* Resolution\n* Priority\n* Existing severity\n* Environment\n* Labels\n* Components\n* Affected versions\n* Fix versions\n* Reporter\n* Assignee\n* Created date\n* Updated date\n* Steps to reproduce\n* Expected result\n* Actual result\n* Acceptance criteria\n* Linked issues\n* Attachment metadata\n* Relevant custom fields\n* Changelog when available\n\nDo not update the Jira issue.\n\n### 5. Get Jira Comments\n\nNode name:\n\n`Jira - Get All Comments`\n\nRetrieve all available comments for the Jira key.\n\nReturn:\n\n* Comment ID\n* Author\n* Created timestamp\n* Updated timestamp\n* Comment body\n\nIf the built-in Jira node cannot retrieve comments, use an authenticated HTTP Request node with the Jira credential.\n\n### 6. Verify Production Bug JQL\n\nNode name:\n\n`Jira - Verify JQL Match`\n\nSearch Jira using this dynamic JQL:\n\n```text\nkey = \"{{$json.jira_key}}\" AND (\n  {{$node[\"Workflow Configuration\"].json[\"PRODUCTION_BUG_JQL\"]}}\n)\n```\n\nIf inserting the configured JQL directly creates invalid nested syntax, construct a safe equivalent without unnecessary parentheses.\n\n### 7. IF: Is Production Bug?\n\nNode name:\n\n`IF - Production Bug Confirmed`\n\nContinue only when the JQL search returns the current Jira key.\n\nFalse branch:\n\n* Record `Skipped - JQL Not Matched` in the audit table.\n* Stop successfully.\n* Do not call the AI model.\n* Do not create an RCA file.\n\n### 8. Create Issue Fingerprint\n\nNode name:\n\n`Create Issue Fingerprint`\n\nCreate a deterministic fingerprint from:\n\n* Jira key\n* Jira updated timestamp\n* Description\n* Priority\n* Environment\n* Labels\n* Status\n* Resolution\n* Most recent comment ID and timestamp\n\nUse a SHA-256 hash if available.\n\nOutput:\n\n```json\n{\n  \"jira_key\": \"\",\n  \"jira_updated_at\": \"\",\n  \"issue_fingerprint\": \"\"\n}\n```\n\n### 9. Get Existing RCA Audit Record\n\nNode name:\n\n`Audit Store - Get Jira Record`\n\nUse the standalone audit Google Sheet (`RCA_AUDIT_SHEET_ID`, worksheet `RCA Audit`) as the persistent audit store. Read by `jira_key` as the unique key.\n\nThe audit table must contain:\n\n* jira_key\n* jira_issue_id\n* issue_fingerprint\n* jira_updated_at\n* rca_status\n* processing_status\n* google_sheet_file_id\n* google_sheet_url\n* excel_file_id\n* excel_file_url\n* rca_version\n* last_processed_at\n* workflow_run_id\n* last_error\n\n### 10. IF: Processing Required?\n\nNode name:\n\n`IF - New or Changed Issue`\n\nContinue when:\n\n* No audit record exists, or\n* The current fingerprint differs from the stored fingerprint, or\n* The previous execution failed.\n\nSkip when the fingerprint is unchanged and the previous execution succeeded.\n\nThis prevents duplicate RCA files when Jira sends repeated webhook events.\n\n### 11. Merge Jira Evidence\n\nNode name:\n\n`Build Jira Evidence Package`\n\nCreate one clean evidence object for the AI Agent.\n\nInclude:\n\n```json\n{\n  \"jira\": {\n    \"key\": \"\",\n    \"url\": \"\",\n    \"project\": \"\",\n    \"summary\": \"\",\n    \"description\": \"\",\n    \"issue_type\": \"\",\n    \"status\": \"\",\n    \"resolution\": \"\",\n    \"priority\": \"\",\n    \"existing_severity\": \"\",\n    \"environment\": \"\",\n    \"labels\": [],\n    \"components\": [],\n    \"affected_versions\": [],\n    \"fix_versions\": [],\n    \"reporter\": \"\",\n    \"assignee\": \"\",\n    \"created_at\": \"\",\n    \"updated_at\": \"\",\n    \"acceptance_criteria\": \"\",\n    \"steps_to_reproduce\": \"\",\n    \"expected_result\": \"\",\n    \"actual_result\": \"\"\n  },\n  \"comments\": [],\n  \"linked_issues\": [],\n  \"attachments\": [],\n  \"changelog\": [],\n  \"evidence_limitations\": []\n}\n```\n\nOnly include attachment metadata unless attachment contents have actually been extracted.\n\n### 12. RCA AI Agent\n\nNode name:\n\n`AI Agent - Generate Evidence-Based RCA`\n\nConnect the configured chat model.\n\nUse temperature `0.1`.\n\nAttach a Structured Output Parser.\n\nThe agent must return valid JSON matching the schema below.\n\n## RCA AGENT SYSTEM PROMPT\n\nUse this complete system prompt:\n\n```text\nYou are a veteran QA engineer, incident investigator, and Root Cause Analysis specialist with more than 15 years of experience.\n\nYou are analyzing a confirmed Jira issue classified by the workflow as a production bug.\n\nYour responsibility is to produce an evidence-based RCA suitable for engineers, QA, product managers, and incident reviewers.\n\nAn RCA identifies:\n\n1. What happened.\n2. What was affected.\n3. The direct technical cause.\n4. The deeper system or process root cause.\n5. Contributing factors.\n6. Why existing controls did not prevent or detect it.\n7. Containment, corrective, and preventive actions.\n8. How the fix will be verified.\n\nNEVER INVENT A ROOT CAUSE.\n\nA Jira ticket being labelled as a production bug does not prove that its root cause is known.\n\nIf the ticket lacks reproduction evidence, logs, timestamps, error details, impact information, or technical isolation:\n\n- Set RCA status to \"Draft - Investigation Required\".\n- Set confidence to \"Low\" or \"Medium\".\n- Set direct cause to \"Not determined\".\n- Set root cause to \"Not determined\".\n- Clearly list the missing evidence.\n- Generate investigation actions before corrective actions.\n- Do not state a suspected cause as confirmed.\n\nDifferentiate:\n\n- Symptom: What the user or system experienced.\n- Direct cause: Immediate technical mechanism that produced the symptom.\n- Root cause: Underlying system, design, process, control, or ownership failure that allowed the direct cause.\n- Contributing factor: A condition that increased likelihood, duration, or impact.\n- Containment: Immediate action that limits ongoing impact.\n- Corrective action: Removes the confirmed cause.\n- Preventive action: Reduces recurrence or improves detection.\n\nUse Jira data as evidence, not as unquestionable truth.\n\nDo not claim an attachment, log, screenshot, comment, or linked issue proves something unless its contents support the claim.\n\nDo not expose credentials, tokens, cookies, passkeys, personal data, or sensitive authentication information.\n\nSeverity represents technical impact.\n\nPriority represents business urgency.\n\nDo not collapse severity and priority.\n\nIf user impact or financial impact is missing, state \"Unknown\".\n\nEvery 5-Whys answer must be supported by evidence. Stop the chain when evidence ends. Use \"Not determined\" for unsupported levels.\n\nCreate no more than 10 action items.\n\nEvery action must contain:\n\n- Unique action ID\n- Action type\n- Specific action\n- Owner or TBD\n- Priority\n- Status\n- Success criteria\n\nReturn JSON only.\n```\n\n## STRUCTURED RCA OUTPUT SCHEMA\n\nConfigure the Structured Output Parser for this schema:\n\n```json\n{\n  \"metadata\": {\n    \"jira_key\": \"\",\n    \"jira_url\": \"\",\n    \"title\": \"\",\n    \"project\": \"\",\n    \"issue_type\": \"\",\n    \"jira_status\": \"\",\n    \"jira_priority\": \"\",\n    \"reporter\": \"\",\n    \"assignee\": \"\",\n    \"created_at\": \"\",\n    \"updated_at\": \"\",\n    \"resolution\": \"\",\n    \"rca_generated_at\": \"\",\n    \"rca_version\": 1\n  },\n  \"assessment\": {\n    \"problem_statement\": \"\",\n    \"observed_symptom\": \"\",\n    \"business_impact\": \"\",\n    \"technical_impact\": \"\",\n    \"detection_method\": \"\",\n    \"rca_status\": \"\",\n    \"confidence\": \"\",\n    \"recommended_severity\": \"\",\n    \"recommended_priority\": \"\",\n    \"direct_cause\": \"\",\n    \"root_cause\": \"\",\n    \"contributing_factors\": \"\",\n    \"evidence_required\": \"\",\n    \"immediate_containment\": \"\",\n    \"corrective_direction\": \"\",\n    \"preventive_direction\": \"\",\n    \"validation_plan\": \"\"\n  },\n  \"five_whys\": [\n    {\n      \"why_level\": \"Why 1\",\n      \"question\": \"\",\n      \"answer\": \"\",\n      \"evidence\": \"\",\n      \"gap_or_next_question\": \"\",\n      \"owner\": \"TBD\",\n      \"status\": \"\"\n    }\n  ],\n  \"timeline\": [\n    {\n      \"date\": \"\",\n      \"time\": \"\",\n      \"event\": \"\",\n      \"source\": \"\",\n      \"evidence_or_observation\": \"\",\n      \"rca_significance\": \"\"\n    }\n  ],\n  \"actions\": [\n    {\n      \"action_id\": \"\",\n      \"type\": \"\",\n      \"action\": \"\",\n      \"owner\": \"TBD\",\n      \"due_date\": \"\",\n      \"priority\": \"\",\n      \"status\": \"\",\n      \"success_criteria\": \"\"\n    }\n  ],\n  \"evidence\": [\n    {\n      \"evidence_id\": \"\",\n      \"type\": \"\",\n      \"description\": \"\",\n      \"source_or_reference\": \"\",\n      \"availability\": \"\",\n      \"finding_or_gap\": \"\",\n      \"confidence\": \"\"\n    }\n  ],\n  \"validation\": [\n    {\n      \"validation_id\": \"\",\n      \"scenario\": \"\",\n      \"expected_result\": \"\",\n      \"coverage\": \"\",\n      \"status\": \"Not Run\",\n      \"required_evidence\": \"\"\n    }\n  ],\n  \"quality_checks\": {\n    \"root_cause_supported_by_evidence\": false,\n    \"missing_information_disclosed\": true,\n    \"contains_invented_facts\": false,\n    \"requires_human_review\": true\n  }\n}\n```\n\nAllowed `rca_status` values:\n\n* Draft - Investigation Required\n* In Investigation\n* Confirmed\n* Closed\n* Not Applicable\n\nAllowed `confidence` values:\n\n* High\n* Medium\n* Low\n\nAllowed action types:\n\n* Investigation\n* Containment\n* Corrective\n* Preventive\n* Decision\n\nAllowed action statuses:\n\n* Not Started\n* In Progress\n* Blocked\n* Completed\n* Cancelled\n\n### 13. Validate RCA Output\n\nNode name:\n\n`Validate RCA JSON`\n\nCheck that:\n\n* Jira key matches the source ticket.\n* All required top-level objects exist.\n* No more than five 5-Whys records exist.\n* No more than ten actions exist.\n* `contains_invented_facts` is false.\n* A Low-confidence RCA does not contain a confidently asserted root cause.\n* If `root_cause_supported_by_evidence` is false, root cause must be `Not determined`, `Unconfirmed`, or equivalent.\n* Arrays contain objects rather than Markdown text.\n* No secret, token, cookie, credential, or raw sensitive authentication value is present.\n\nInvalid output branch:\n\n1. Retry the AI Agent once with the validation error.\n2. If still invalid, record the execution as failed.\n3. Do not create or overwrite an RCA workbook with invalid data.\n\n### 14. Determine Existing Workbook\n\nNode name:\n\n`IF - Existing RCA Workbook`\n\nIf the audit record contains a valid `google_sheet_file_id`:\n\n* Reuse the existing file.\n* Increment `rca_version`.\n* Do not create another workbook.\n\nIf no file exists:\n\n* Copy the RCA template.\n\n### 15. Copy RCA Template\n\nNode name:\n\n`Google Drive - Copy RCA Template`\n\nUse Google Drive:\n\n* Operation: Copy File\n* Source: `RCA_TEMPLATE_FILE_ID`\n* Destination folder: `RCA_GOOGLE_SHEETS_FOLDER_ID`\n* Filename:\n\n```text\nRCA_{{$json.metadata.jira_key}}_{{$now.format(\"yyyy-MM-dd\")}}\n```\n\nPreserve it as a native Google Sheet.\n\nCapture:\n\n* New file ID\n* Google Sheet URL\n\n### 16. Clear Previous Dynamic Data\n\nNode name:\n\n`Google Sheets - Clear Dynamic RCA Rows`\n\nFor existing files and fresh template copies, clear the previous dynamic values while preserving formatting.\n\nClear only:\n\n```text\n'5 Whys'!A2:G100\n'Timeline'!A2:F100\n'Actions'!A2:H100\n'Evidence & Validation'!A2:G100\n'Evidence & Validation'!A11:F100\n```\n\nDo not clear:\n\n* Headers\n* Formatting\n* Dropdown validation\n* Conditional formatting\n* Formulas\n* The Lists worksheet\n* The Blank RCA Template worksheet\n\nIf a worksheet in the copied \"RCA Sheet\" is a flat table whose header row is row 1 and whose sample data sits in row 2, the clear operation must also remove the sample row content from the dynamic ranges above.\n\n### 17. Populate RCA Summary\n\nNode name:\n\n`Google Sheets - Populate RCA Summary`\n\nUse the Structured Output Parser data.\n\nWrite these values to the copied workbook:\n\n```text\n'RCA Summary'!B6       = metadata.jira_key\n'RCA Summary'!D6       = metadata.issue_type\n'RCA Summary'!F6       = metadata.jira_status\n'RCA Summary'!H6       = metadata.jira_priority\n\n'RCA Summary'!B7:C7    = metadata.project\n'RCA Summary'!E7       = metadata.reporter\n'RCA Summary'!G7:H7    = metadata.assignee\n\n'RCA Summary'!B8:C8    = metadata.created_at\n'RCA Summary'!E8:F8    = metadata.updated_at\n'RCA Summary'!H8       = metadata.resolution\n\n'RCA Summary'!B9:H9    = metadata.title\n'RCA Summary'!B10:H10  = metadata.jira_url\n'RCA Summary'!B11:H11  = Jira source and workflow run ID\n\n'RCA Summary'!B14:H15  = assessment.problem_statement\n'RCA Summary'!B16:H17  = assessment.observed_symptom\n'RCA Summary'!B18:H19  = assessment.business_impact\n'RCA Summary'!B20:H21  = assessment.technical_impact\n'RCA Summary'!B22:H23  = assessment.detection_method\n\n'RCA Summary'!B24:C24  = assessment.rca_status\n'RCA Summary'!E24      = assessment.confidence\n'RCA Summary'!G24:H24  = assessment.recommended_severity\n\n'RCA Summary'!B25:H26  = assessment.direct_cause\n'RCA Summary'!B27:H28  = assessment.root_cause\n'RCA Summary'!B29:H30  = assessment.contributing_factors\n'RCA Summary'!B31:H34  = assessment.evidence_required\n\n'RCA Summary'!B37:H38  = assessment.immediate_containment\n'RCA Summary'!B39:H40  = assessment.corrective_direction\n'RCA Summary'!B41:H43  = assessment.preventive_direction\n'RCA Summary'!B44:H46  = assessment.validation_plan\n```\n\nPreserve the existing formulas in the Action Summary section.\n\nUse Google Sheets batch updates where possible instead of creating a separate API request for every cell.\n\nIf the copied workbook's first worksheet is a flat header + sample table instead of the styled `RCA Summary` layout, adapt this node to the actual layout (map columns to the header names) and do the same adaptation for every other writer node — the fixed cell map above applies only when the worksheet matches it.\n\n### 18. Populate 5 Whys\n\nNode name:\n\n`Google Sheets - Write 5 Whys`\n\nSplit `five_whys` into items and write one row per object:\n\n```text\nA = why_level\nB = question\nC = answer\nD = evidence\nE = gap_or_next_question\nF = owner\nG = status\n```\n\nBegin at row 2.\n\nWrite a maximum of five rows.\n\n### 19. Populate Timeline\n\nNode name:\n\n`Google Sheets - Write Timeline`\n\nWrite:\n\n```text\nA = date\nB = time\nC = event\nD = source\nE = evidence_or_observation\nF = rca_significance\n```\n\nBegin at row 2.\n\nSort by date and time when usable dates exist.\n\n### 20. Populate Actions\n\nNode name:\n\n`Google Sheets - Write Actions`\n\nWrite:\n\n```text\nA = action_id\nB = type\nC = action\nD = owner\nE = due_date\nF = priority\nG = status\nH = success_criteria\n```\n\nBegin at row 2.\n\nDo not exceed ten action rows.\n\n### 21. Populate Evidence\n\nNode name:\n\n`Google Sheets - Write Evidence`\n\nWrite:\n\n```text\nA = evidence_id\nB = type\nC = description\nD = source_or_reference\nE = availability\nF = finding_or_gap\nG = confidence\n```\n\nBegin at row 2.\n\n### 22. Populate Validation Plan\n\nNode name:\n\n`Google Sheets - Write Validation`\n\nWrite:\n\n```text\nA = validation_id\nB = scenario\nC = expected_result\nD = coverage\nE = status\nF = required_evidence\n```\n\nBegin at row 11.\n\n### 23. Export as Microsoft Excel\n\nNode name:\n\n`Google Drive API - Export RCA as XLSX`\n\nRun only when `EXPORT_XLSX` is true.\n\nExport the completed native Google Sheet using the Google Drive API with this MIME type:\n\n```text\napplication/vnd.openxmlformats-officedocument.spreadsheetml.sheet\n```\n\nFilename:\n\n```text\nRCA_{{$json.metadata.jira_key}}_v{{$json.metadata.rca_version}}.xlsx\n```\n\nUpload or store the resulting Excel file in:\n\n`RCA_EXCEL_FOLDER_ID`\n\nCapture:\n\n* Excel file ID\n* Excel file URL\n* Filename\n\nIf a previous Excel export exists for the same Jira key and versioning policy allows replacement, update it. Otherwise, create a versioned file.\n\n### 24. Update Audit Store\n\nNode name:\n\n`Audit Store - Upsert Success`\n\nUpsert by `jira_key` into the standalone audit Google Sheet (`RCA_AUDIT_SHEET_ID`, worksheet `RCA Audit`).\n\nStore:\n\n* Current issue fingerprint\n* Jira updated timestamp\n* RCA status\n* Processing status = Success\n* Google Sheet file ID and URL\n* Excel file ID and URL\n* RCA version\n* Last processed timestamp\n* Workflow run ID\n* Empty last error\n\n### 25. Optional Jira Comment\n\nNode name:\n\n`IF - Jira Comment Enabled`\n\nRun only if `ADD_JIRA_COMMENT` is true.\n\nAdd a concise comment:\n\n```text\nAutomated RCA generated/updated.\n\nRCA status: {{rca_status}}\nConfidence: {{confidence}}\nGoogle Sheet: {{google_sheet_url}}\nExcel file: {{excel_file_url}}\n\nThis RCA is evidence-based and may require human review before closure.\n```\n\nDo not transition or close the Jira issue automatically.\n\nPrevent this comment update from producing a duplicate RCA by relying on the issue fingerprint and audit-store checks.\n\n### 26. Error Handling\n\nCreate a dedicated error workflow or Error Trigger branch.\n\nOn failure:\n\n* Capture Jira key.\n* Capture node name.\n* Capture error message.\n* Capture execution ID.\n* Capture timestamp.\n* Update the audit store with `processing_status = Failed`.\n* Preserve any existing successful RCA file.\n* Do not overwrite a valid workbook with incomplete data.\n* Do not expose secrets in logs.\n* Make the execution retryable.\n\nEnable retry with exponential backoff for:\n\n* Jira API rate limits\n* Google Drive temporary failures\n* Google Sheets temporary failures\n* AI provider rate limits\n\nDo not retry permanent validation errors indefinitely.\n\n## HUMAN REVIEW RULE\n\nEvery new RCA should default to:\n\n```text\nrequires_human_review = true\n```\n\nDo not automatically close the Jira issue.\n\nDo not automatically mark the RCA as Confirmed unless:\n\n* The generated root cause is supported by evidence, and\n* Confidence is High, and\n* A human approval mechanism has been explicitly configured.\n\n## WORKFLOW ACCEPTANCE TESTS\n\nCreate and document tests for:\n\n1. New Jira production bug creates one RCA workbook and one Excel export.\n2. Non-production bug is skipped.\n3. Story or Task is skipped by JQL.\n4. Repeated identical webhook does not create a duplicate.\n5. Relevant Jira update regenerates the RCA and updates the same Google Sheet.\n6. Jira update increments RCA version.\n7. Missing logs produce Draft RCA with root cause Not determined.\n8. Confirmed evidence can produce an evidence-backed root cause.\n9. Invalid AI JSON retries once and then fails safely.\n10. Google Sheets failure does not mark the workflow successful.\n11. Existing successful RCA is not destroyed when an update fails.\n12. Excel export preserves all template worksheets.\n13. No credentials or authentication secrets appear in the RCA.\n14. The action summary formulas calculate correctly.\n15. The workflow can be replayed safely.\n\n## FINAL DELIVERABLE\n\nBuild:\n\n1. The complete connected n8n workflow.\n2. All node names and expressions.\n3. Structured Output Parser schema.\n4. AI Agent system prompt.\n5. JQL placeholders.\n6. Audit-store schema.\n7. Error-handling branch.\n8. Template cell mappings.\n9. Google Sheet to XLSX export.\n10. A short setup checklist.\n11. A short test checklist.\n\nUse placeholder credentials only.\n\nDo not hardcode secrets, access tokens, email addresses, Jira credentials, Google credentials, or real file IDs (the `RCA_TEMPLATE_FILE_ID` value `1NNCxgyHaXjt0PJFvVAgtUvOB_X4mmzHiVDCUxTrbJCc` and the master template URL are the only real identifiers, and they identify the read-only master template).\n\nDo not leave nodes disconnected.\n\nDo not return a conceptual diagram without building the workflow.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        384,
+        0
+      ],
+      "id": "b47704ba-4baf-4084-8618-51e02f0b1af7",
+      "name": "RCA Agent",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1NNCxgyHaXjt0PJFvVAgtUvOB_X4mmzHiVDCUxTrbJCc",
+          "mode": "list",
+          "cachedResultName": "RCA Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NNCxgyHaXjt0PJFvVAgtUvOB_X4mmzHiVDCUxTrbJCc/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NNCxgyHaXjt0PJFvVAgtUvOB_X4mmzHiVDCUxTrbJCc/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "jira_key": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('jira_key', ``, 'string') }}",
+            "project": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('project', ``, 'string') }}",
+            "summary": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('summary', ``, 'string') }}",
+            "issue_type": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('issue_type', ``, 'string') }}",
+            "jira_status": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('jira_status', ``, 'string') }}",
+            "jira_url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('jira_url', ``, 'string') }}",
+            "reporter": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('reporter', ``, 'string') }}",
+            "assignee": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('assignee', ``, 'string') }}",
+            "created_date": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('created_date', ``, 'string') }}",
+            "updated_date": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('updated_date', ``, 'string') }}",
+            "environment": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('environment', ``, 'string') }}",
+            "affected_version": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('affected_version', ``, 'string') }}",
+            "fix_version": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('fix_version', ``, 'string') }}",
+            "labels": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('labels', ``, 'string') }}",
+            "components": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('components', ``, 'string') }}",
+            "existing_jira_severity": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('existing_jira_severity', ``, 'string') }}",
+            "existing_jira_priority": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('existing_jira_priority', ``, 'string') }}",
+            "defect_disposition": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('defect_disposition', ``, 'string') }}",
+            "recommended_severity": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('recommended_severity', ``, 'string') }}",
+            "recommended_priority": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('recommended_priority', ``, 'string') }}",
+            "category": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('category', ``, 'string') }}",
+            "suspected_layer": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('suspected_layer', ``, 'string') }}",
+            "blast_radius": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('blast_radius', ``, 'string') }}",
+            "reproducibility": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('reproducibility', ``, 'string') }}",
+            "workaround_available": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('workaround_available', ``, 'string') }}",
+            "regression": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('regression', ``, 'string') }}",
+            "technical_impact": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('technical_impact', ``, 'string') }}",
+            "business_impact": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('business_impact', ``, 'string') }}",
+            "triage_rationale": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('triage_rationale', ``, 'string') }}",
+            "severity_priority_explanation": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('severity_priority_explanation', ``, 'string') }}",
+            "likely_root_cause": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('likely_root_cause', ``, 'string') }}",
+            "missing_information": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('missing_information', ``, 'string') }}",
+            "assumptions": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('assumptions', ``, 'string') }}",
+            "confidence": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('confidence', ``, 'string') }}",
+            "recommended_action": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('recommended_action', ``, 'string') }}",
+            "triage_status": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('triage_status', ``, 'string') }}",
+            "processing_error": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('processing_error', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "jira_key"
+          ],
+          "schema": [
+            {
+              "id": "jira_key",
+              "displayName": "jira_key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "project",
+              "displayName": "project",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "summary",
+              "displayName": "summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "issue_type",
+              "displayName": "issue_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "jira_status",
+              "displayName": "jira_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "jira_url",
+              "displayName": "jira_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "reporter",
+              "displayName": "reporter",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "assignee",
+              "displayName": "assignee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_date",
+              "displayName": "created_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "updated_date",
+              "displayName": "updated_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "environment",
+              "displayName": "environment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "affected_version",
+              "displayName": "affected_version",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fix_version",
+              "displayName": "fix_version",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "labels",
+              "displayName": "labels",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "components",
+              "displayName": "components",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "existing_jira_severity",
+              "displayName": "existing_jira_severity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "existing_jira_priority",
+              "displayName": "existing_jira_priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "defect_disposition",
+              "displayName": "defect_disposition",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "recommended_severity",
+              "displayName": "recommended_severity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "recommended_priority",
+              "displayName": "recommended_priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "category",
+              "displayName": "category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "suspected_layer",
+              "displayName": "suspected_layer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "blast_radius",
+              "displayName": "blast_radius",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "reproducibility",
+              "displayName": "reproducibility",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "workaround_available",
+              "displayName": "workaround_available",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "regression",
+              "displayName": "regression",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "technical_impact",
+              "displayName": "technical_impact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "business_impact",
+              "displayName": "business_impact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "triage_rationale",
+              "displayName": "triage_rationale",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "severity_priority_explanation",
+              "displayName": "severity_priority_explanation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "likely_root_cause",
+              "displayName": "likely_root_cause",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "missing_information",
+              "displayName": "missing_information",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "assumptions",
+              "displayName": "assumptions",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "confidence",
+              "displayName": "confidence",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "recommended_action",
+              "displayName": "recommended_action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "triage_status",
+              "displayName": "triage_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "processing_error",
+              "displayName": "processing_error",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        688,
+        192
+      ],
+      "id": "0b0b42e9-18aa-4254-b37a-e9ebaa3a36c8",
+      "name": "Append or update row in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mcPHFSvFddBHJBFW",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.jiraTool",
+      "typeVersion": 1,
+      "position": [
+        432,
+        240
+      ],
+      "id": "b998b27c-f168-4271-8ea8-fff27c1d47da",
+      "name": "Get many issues in Jira Software",
+      "credentials": {
+        "jiraSoftwareCloudApi": {
+          "id": "W7jysTa1ulEeRiIc",
+          "name": "Jira SW Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        336,
+        304
+      ],
+      "id": "4ace04bf-9405-4194-b477-f8de6cc0144b",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "RCA Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        []
+      ]
+    },
+    "Append or update row in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "RCA Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many issues in Jira Software": {
+      "ai_tool": [
+        [
+          {
+            "node": "RCA Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "RCA Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "888206cf-d709-4421-962a-0f26b708e09d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4a9cd20779731114053eeacffeada0ce6a101d8e655a6510586ca8037f57f455"
+  },
+  "nodeGroups": [],
+  "id": "9dMlytBUxOBc3FFH",
+  "tags": []
+}
