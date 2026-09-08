@@ -1,0 +1,366 @@
+{
+  "name": "06_Social_Media_AIAgent",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "d3332b8c-f047-46de-82fb-260b2bee2b67",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        48,
+        240
+      ],
+      "id": "36e39775-4ab3-42a4-9c74-7a402cb43593",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        288,
+        224
+      ],
+      "id": "d287f327-b090-41ec-9ee4-7d20478f9ff2",
+      "name": "Content Topic Generator"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        608,
+        112
+      ],
+      "id": "523e3a79-36a4-435b-988f-a2e344b48c2e",
+      "name": "Content Creator(LinkedPost)"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "models/gemini-3.1-flash-image-preview"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        1056,
+        160
+      ],
+      "id": "7938f0bc-8a44-4479-b1e2-41b26f65e8af",
+      "name": "Generate an image"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        880,
+        352
+      ],
+      "id": "8ebed809-a0ae-4c21-a64a-b5dad58394c0",
+      "name": "HashTags"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1312,
+        208
+      ],
+      "id": "047543ea-d2b3-4a72-9236-ef89411b4047",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1504,
+        208
+      ],
+      "id": "4bb96568-949c-4f56-9f98-c6bd3c96d178",
+      "name": "Review the Post"
+    },
+    {
+      "parameters": {
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.linkedIn",
+      "typeVersion": 1,
+      "position": [
+        1808,
+        224
+      ],
+      "id": "aad8592a-c660-4219-b6b5-835f42fe2022",
+      "name": "Create a post"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "1. Create Iamge\n2. Find the topic\n3. Create Linkedin Post\n4. Hashtags"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        464,
+        544
+      ],
+      "id": "8ef33ab1-0dd0-4564-b914-0f22a316af9d",
+      "name": "Content Generator"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "models/gemini-3-flash-preview"
+        },
+        "messages": {
+          "values": [
+            {}
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGeminiTool",
+      "typeVersion": 1.2,
+      "position": [
+        688,
+        736
+      ],
+      "id": "739c9d73-af87-4efc-8166-62b8e5912957",
+      "name": "Message a model in Google Gemini"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        480,
+        768
+      ],
+      "id": "6162f6f9-1175-4d39-86d9-beda273f9be0",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        96,
+        512
+      ],
+      "id": "6d1c5a8b-32b5-486b-a04e-5d25ea817bd5",
+      "name": "Schedule Trigger1"
+    },
+    {
+      "parameters": {
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.linkedIn",
+      "typeVersion": 1,
+      "position": [
+        976,
+        656
+      ],
+      "id": "76f6bd39-c897-45ff-b7cd-29d2925e850c",
+      "name": "Create a post1"
+    },
+    {
+      "parameters": {
+        "operation": "uploadText"
+      },
+      "type": "n8n-nodes-upload-post.uploadPost",
+      "typeVersion": 1,
+      "position": [
+        1728,
+        480
+      ],
+      "id": "7b013f8f-289a-4158-aeef-88266ddbca42",
+      "name": "Upload a text post"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Content Topic Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Content Topic Generator": {
+      "main": [
+        [
+          {
+            "node": "Content Creator(LinkedPost)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Content Creator(LinkedPost)": {
+      "main": [
+        [
+          {
+            "node": "Generate an image",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HashTags",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate an image": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HashTags": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Review the Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Review the Post": {
+      "main": [
+        [
+          {
+            "node": "Create a post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model in Google Gemini": {
+      "ai_tool": [
+        [
+          {
+            "node": "Content Generator",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Content Generator",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Content Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Content Generator": {
+      "main": [
+        [
+          {
+            "node": "Create a post1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "da3dd69c-6bb6-4cd9-94a3-fce58b075171",
+  "meta": {
+    "instanceId": "4a9cd20779731114053eeacffeada0ce6a101d8e655a6510586ca8037f57f455"
+  },
+  "nodeGroups": [],
+  "id": "E6tup1h3PZ1wBHUy",
+  "tags": []
+}
