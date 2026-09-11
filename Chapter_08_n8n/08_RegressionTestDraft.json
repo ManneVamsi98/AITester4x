@@ -1,0 +1,384 @@
+{
+  "name": "08_RegressionTestDraft",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Regression Test Draft\n\nJira prod-bug event -> AI Agent drafts a regression test -> append a row to Google Sheets.\n\nDraft only. Requires QA review before the case is approved.",
+        "height": 224,
+        "width": 304,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        -240
+      ],
+      "typeVersion": 1,
+      "id": "a4f81cd0-c748-4010-9bf6-23f84941a21a",
+      "name": "Sticky Note - Regression Test Draft"
+    },
+    {
+      "parameters": {
+        "jiraVersion": "cloud",
+        "events": [
+          "jira:issue_created",
+          "jira:issue_updated"
+        ],
+        "additionalFields": {
+          "filter": "labels = production-bug ORDER BY created DESC"
+        }
+      },
+      "type": "n8n-nodes-base.jiraTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "ee198b9a-c82e-4392-82f1-6c84afdaec03",
+      "name": "Jira Trigger - Production Bug",
+      "webhookId": "484441a3-0264-45dd-95c7-cd8e66e95bbd",
+      "credentials": {
+        "jiraSoftwareCloudApi": {
+          "id": "REPLACE_WITH_JIRA_CREDENTIAL_ID",
+          "name": "Jira SW Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Draft a regression test case from the following production incident.\n\nJira Key: {{ $json.issue?.key }}\nEvent: {{ $json.webhookEvent }}\nSummary: {{ $json.issue?.fields?.summary }}\nDescription: {{ $json.issue?.fields?.description }}\nPriority: {{ $json.issue?.fields?.priority?.name }}\nLabels: {{ $json.issue?.fields?.labels }}\nReporter: {{ $json.issue?.fields?.reporter?.displayName }}\nResolution: {{ $json.issue?.fields?.resolution?.name }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are a senior QA engineer and Regression Test Specialist with deep experience turning production incidents into precise, reusable regression tests. You have written thousands of regression cases for web, API, and mobile products.\n\nYour job:\nGiven one production incident, draft exactly ONE new regression test case that would have caught this defect before it reached production.\n\nRules:\n1. Work ONLY from the incident details provided. Do not invent product behaviour, modules, or fields.\n2. If a required detail is missing or unclear, write \"TBD\" for that field instead of guessing.\n3. Copy the incoming Jira key verbatim into jira_key.\n4. test_case_title must be specific and start with the action under test, not the bug number.\n5. test_steps must be an ordered, numbered list of independently executable steps (use 1. 2. 3.).\n6. expected_result must assert the correct post-fix behaviour, i.e. the defect no longer reproduces.\n7. preconditions lists the required state, data, account role, and environment.\n8. test_data lists the concrete inputs needed, or \"TBD\" when unknown.\n9. bug_summary is a one or two sentence restatement of the production defect.\n10. root_cause_hypothesis is a short, clearly-marked hypothesis (prefix with \"Hypothesis:\") and never presented as confirmed fact.\n11. automation_notes state whether the case is a good automation candidate and which layer (UI, API, unit) best covers it.\n12. review_status must always be exactly \"Draft - Requires QA Review\". Never approve your own output.\n\nControlled vocabularies (use these exact values):\n- severity: S0 - Blocker, S1 - Critical, S2 - Major, S3 - Minor, S4 - Trivial\n- priority: P0 - Immediate, P1 - Urgent, P2 - High, P3 - Normal, P4 - Low\n- test_type: Functional, Regression, Integration, API, UI, Performance, Security\n\nOutput contract:\nReturn ONLY a single JSON object that conforms to the structured output schema. No markdown, no code fences, no commentary, and no extra fields."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        384,
+        0
+      ],
+      "id": "44d2b9c5-b121-4d42-a037-b280c1e5c3de",
+      "name": "AI Agent - Regression Test Writer"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        256,
+        208
+      ],
+      "id": "9ec735f9-27bf-4d89-8e7b-804f0e4956ba",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\"type\":\"object\",\"properties\":{\"jira_key\":{\"type\":\"string\"},\"test_case_title\":{\"type\":\"string\"},\"module\":{\"type\":\"string\"},\"severity\":{\"type\":\"string\"},\"priority\":{\"type\":\"string\"},\"test_type\":{\"type\":\"string\"},\"preconditions\":{\"type\":\"string\"},\"test_steps\":{\"type\":\"string\"},\"test_data\":{\"type\":\"string\"},\"expected_result\":{\"type\":\"string\"},\"bug_summary\":{\"type\":\"string\"},\"root_cause_hypothesis\":{\"type\":\"string\"},\"automation_notes\":{\"type\":\"string\"},\"review_status\":{\"type\":\"string\"}},\"required\":[\"jira_key\",\"test_case_title\",\"module\",\"severity\",\"priority\",\"test_type\",\"preconditions\",\"test_steps\",\"test_data\",\"expected_result\",\"bug_summary\",\"root_cause_hypothesis\",\"automation_notes\",\"review_status\"]}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        544,
+        208
+      ],
+      "id": "cdce7f47-a53c-4a35-87a9-06140dee6fac",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "sheet",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "REPLACE_WITH_REGRESSION_TESTS_SPREADSHEET_ID"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "RegressionTests"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "jira_key": "={{ $json.output.jira_key }}",
+            "test_case_title": "={{ $json.output.test_case_title }}",
+            "module": "={{ $json.output.module }}",
+            "severity": "={{ $json.output.severity }}",
+            "priority": "={{ $json.output.priority }}",
+            "test_type": "={{ $json.output.test_type }}",
+            "preconditions": "={{ $json.output.preconditions }}",
+            "test_steps": "={{ $json.output.test_steps }}",
+            "test_data": "={{ $json.output.test_data }}",
+            "expected_result": "={{ $json.output.expected_result }}",
+            "bug_summary": "={{ $json.output.bug_summary }}",
+            "root_cause_hypothesis": "={{ $json.output.root_cause_hypothesis }}",
+            "automation_notes": "={{ $json.output.automation_notes }}",
+            "review_status": "={{ $json.output.review_status }}",
+            "source_system": "Jira Trigger",
+            "created_at": "={{ $now.toISO() }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "jira_key",
+              "displayName": "jira_key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "test_case_title",
+              "displayName": "test_case_title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "module",
+              "displayName": "module",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "severity",
+              "displayName": "severity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "test_type",
+              "displayName": "test_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "preconditions",
+              "displayName": "preconditions",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "test_steps",
+              "displayName": "test_steps",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "test_data",
+              "displayName": "test_data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "expected_result",
+              "displayName": "expected_result",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "bug_summary",
+              "displayName": "bug_summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "root_cause_hypothesis",
+              "displayName": "root_cause_hypothesis",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "automation_notes",
+              "displayName": "automation_notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "review_status",
+              "displayName": "review_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "source_system",
+              "displayName": "source_system",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        768,
+        0
+      ],
+      "id": "69b2c26f-7fc0-4051-b2e2-ba0d74da679b",
+      "name": "Google Sheets - Create Regression Test Case",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_WITH_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Jira Trigger - Production Bug": {
+      "main": [
+        [
+          {
+            "node": "AI Agent - Regression Test Writer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent - Regression Test Writer": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Create Regression Test Case",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent - Regression Test Writer",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent - Regression Test Writer",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "f1e0e419-017c-454b-8caf-0a30a46dc572",
+  "meta": {
+    "instanceId": "4a9cd20779731114053eeacffeada0ce6a101d8e655a6510586ca8037f57f455",
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "id": "eKEFMEe7TPMq2j5D",
+  "tags": []
+}
