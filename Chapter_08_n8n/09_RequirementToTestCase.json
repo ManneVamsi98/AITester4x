@@ -1,0 +1,529 @@
+{
+  "name": "09_RequirementToTestCase",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Requirement -> BDD/Gherkin Test Cases\n\nPOST a Jira issue key to the webhook. The agent drafts positive + negative Gherkin scenarios and one row is appended per scenario.\n\nDrafts only. Every row requires QA review.",
+        "height": 240,
+        "width": 320,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        -272
+      ],
+      "typeVersion": 1,
+      "id": "270f0a65-b63d-4bb0-b77e-833f0263ccf9",
+      "name": "Sticky Note - Requirement to Test Cases"
+    },
+    {
+      "parameters": {
+        "content": "## Output\n\nOne Google Sheets row per Gherkin scenario.",
+        "height": 240,
+        "width": 304,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1120,
+        -272
+      ],
+      "typeVersion": 1,
+      "id": "64d4826d-5065-4614-a117-7e1f68cfbff7",
+      "name": "Sticky Note - Output"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "requirement-to-testcases",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "cc4e00c3-2afd-419e-be1f-534fe0864684",
+      "name": "Webhook - New Requirement",
+      "webhookId": "a06bcfce-1cdc-4c23-ac4a-8cd912476dd3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d31b3dce-d7e7-4074-b200-f8a87d554c55",
+              "leftValue": "={{ $json.body.issueKey || $json.query.issueKey }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": false,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "d3a18898-ef0c-4214-bb2d-c3ddc20ca4da",
+      "name": "IF - Issue Key Present"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        448,
+        272
+      ],
+      "id": "4cfad164-6370-4ec5-8a11-3887b129b60e",
+      "name": "No Operation - Missing Issue Key"
+    },
+    {
+      "parameters": {
+        "jiraVersion": "cloud",
+        "resource": "issue",
+        "operation": "get",
+        "issueKey": "={{ $json.body.issueKey || $json.query.issueKey }}",
+        "additionalFields": {
+          "fields": "summary,description,issuetype,status,priority,labels,components,reporter,created"
+        }
+      },
+      "type": "n8n-nodes-base.jira",
+      "typeVersion": 1,
+      "position": [
+        448,
+        0
+      ],
+      "id": "5881878d-1990-4cd9-aee6-1ff207024985",
+      "name": "Jira - Get User Story",
+      "credentials": {
+        "jiraSoftwareCloudApi": {
+          "id": "REPLACE_WITH_JIRA_CREDENTIAL_ID",
+          "name": "Jira SW Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "// Normalize a Jira issue into a flat, prompt-friendly object.\n//\n// Jira Cloud returns `fields.description` in Atlassian Document Format (ADF) -\n// a nested JSON tree, not plain text. We flatten it so the AI Agent receives\n// readable prose instead of raw ADF. This mirrors the ADF handling in\n// Chapter 3 (Jira_TestCase_Generator/jira_client.py).\n\nfunction adfToText(node) {\n  if (node === null || node === undefined) return '';\n  if (typeof node === 'string') return node;\n  if (Array.isArray(node)) return node.map(adfToText).join('');\n\n  if (typeof node === 'object') {\n    switch (node.type) {\n      case 'text':\n        return node.text || '';\n      case 'hardBreak':\n        return '\\n';\n      case 'codeBlock':\n        return '\\n' + adfToText(node.content).trim() + '\\n';\n      case 'paragraph':\n      case 'heading':\n      case 'listItem':\n        return adfToText(node.content).trim() + '\\n';\n      default:\n        return adfToText(node.content);\n    }\n  }\n\n  return String(node);\n}\n\n// Pull the \"Acceptance Criteria\" section out of the description text.\nfunction extractAcceptanceCriteria(text) {\n  const match = text.match(\n    /acceptance\\s+criteri[ae]\\s*[:\\-]?\\s*([\\s\\S]*?)(?=\\n\\s*(?:[A-Z][A-Za-z /]{2,40})\\s*[:\\-]|$)/i\n  );\n  return match ? match[1].trim() : '';\n}\n\nconst issue = $input.first().json;\nconst fields = issue.fields || {};\n\nconst descriptionText = adfToText(fields.description).trim();\nconst baseUrl = (issue.self || '').split('/rest/')[0];\n\nconst joinNames = (list) =>\n  Array.isArray(list) && list.length\n    ? list.map((item) => item.name).filter(Boolean).join(', ')\n    : 'None';\n\nreturn [\n  {\n    json: {\n      jira_key: issue.key || '',\n      story_summary: fields.summary || 'Not specified',\n      description_text: descriptionText || 'Not specified',\n      acceptance_criteria: extractAcceptanceCriteria(descriptionText) || 'Not specified',\n      issue_type: (fields.issuetype && fields.issuetype.name) || 'Not specified',\n      status: (fields.status && fields.status.name) || 'Not specified',\n      priority: (fields.priority && fields.priority.name) || 'Not specified',\n      labels: Array.isArray(fields.labels) && fields.labels.length ? fields.labels.join(', ') : 'None',\n      components: joinNames(fields.components),\n      reporter: (fields.reporter && fields.reporter.displayName) || 'Not specified',\n      created: fields.created || '',\n      jira_url: baseUrl && issue.key ? baseUrl + '/browse/' + issue.key : '',\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        0
+      ],
+      "id": "e39b6543-9efb-42f2-8cfc-25b262f5091a",
+      "name": "Code - Normalize Jira Story"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Draft BDD/Gherkin test cases for the following requirement.\n\nJira Key: {{ $json.jira_key }}\nIssue Type: {{ $json.issue_type }}\nStatus: {{ $json.status }}\nPriority: {{ $json.priority }}\nLabels: {{ $json.labels }}\nComponents: {{ $json.components }}\n\nSummary:\n{{ $json.story_summary }}\n\nDescription:\n{{ $json.description_text }}\n\nAcceptance Criteria:\n{{ $json.acceptance_criteria }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are a Senior QA Engineer who specialises in Behaviour-Driven Development. You have written Gherkin specifications for hundreds of web, API, and mobile products, and you are known for tests that are precise, traceable, and free of invented detail.\n\nYour job:\nConvert ONE requirement (a Jira user story or PRD extract) into a BDD feature with a set of Gherkin scenarios. Cover the positive (happy path) cases and the negative cases, and add boundary or edge cases only where the requirement actually implies them.\n\nRules (strict):\n1. Use ONLY the requirement text supplied. Never invent fields, screens, endpoints, error messages, status codes, or exact values that are not in the requirement.\n2. If a detail needed for a field is missing, write \"Not specified\" in that field. Never guess.\n3. Every scenario must trace back to the requirement. Put the exact phrase or clause it came from in requirement_ref (a short quote, not a paraphrase).\n4. The gherkin field must contain valid Gherkin for ONE scenario:\n   - Start with a \"Scenario: <title>\" line.\n   - Then Given / When / Then steps, using \"And\" where a step continues the previous keyword.\n   - One behaviour per scenario. Never merge two scenarios into a single Then.\n5. scenario_type must be exactly one of: Positive, Negative, Boundary, Edge Case.\n6. priority must be exactly one of: High, Medium, Low.\n7. scenario_id must follow the format SC-001, SC-002, SC-003, ...\n8. Always include at least one Positive and at least one Negative scenario when the requirement contains any validation, authentication, permission, or error-handling behaviour.\n9. expected_result restates the observable outcome asserted by the Then step, in one sentence.\n10. preconditions lists the required starting state, data, and user role. Use \"Not specified\" when the requirement does not state them.\n11. test_data lists concrete inputs, or \"Not specified\" when unknown.\n12. automation_candidate must start with \"Yes\" or \"No\" followed by a short reason, e.g. \"Yes - deterministic API check, good fit for automated regression\".\n13. Copy the incoming jira_key VERBATIM into both the top-level jira_key field and the jira_key field of EVERY scenario object. Do not reformat it.\n14. feature_title is a short feature name derived from the requirement summary. Repeat it in every scenario object exactly as it appears at the top level.\n15. review_status must always be exactly \"Draft - Requires QA Review\". Never approve your own output.\n\nOutput contract:\nReturn ONLY a single JSON object that conforms to the structured output schema. No markdown, no code fences, no commentary, and no extra fields."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        896,
+        0
+      ],
+      "id": "3fba36d2-62f7-4bd0-bb83-deaf1fde0677",
+      "name": "AI Agent - Requirement to Gherkin"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        768,
+        240
+      ],
+      "id": "d7b3c2b3-39ab-4dcd-84ed-55c36e17471e",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "REPLACE_WITH_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\"type\":\"object\",\"properties\":{\"jira_key\":{\"type\":\"string\"},\"feature_title\":{\"type\":\"string\"},\"story_summary\":{\"type\":\"string\"},\"scenario_count\":{\"type\":\"number\"},\"scenarios\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"jira_key\":{\"type\":\"string\"},\"feature_title\":{\"type\":\"string\"},\"scenario_id\":{\"type\":\"string\"},\"scenario_title\":{\"type\":\"string\"},\"scenario_type\":{\"type\":\"string\"},\"priority\":{\"type\":\"string\"},\"gherkin\":{\"type\":\"string\"},\"preconditions\":{\"type\":\"string\"},\"test_data\":{\"type\":\"string\"},\"expected_result\":{\"type\":\"string\"},\"requirement_ref\":{\"type\":\"string\"},\"automation_candidate\":{\"type\":\"string\"},\"review_status\":{\"type\":\"string\"}},\"required\":[\"jira_key\",\"feature_title\",\"scenario_id\",\"scenario_title\",\"scenario_type\",\"priority\",\"gherkin\",\"preconditions\",\"test_data\",\"expected_result\",\"requirement_ref\",\"automation_candidate\",\"review_status\"]}}},\"required\":[\"jira_key\",\"feature_title\",\"story_summary\",\"scenario_count\",\"scenarios\"]}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1024,
+        240
+      ],
+      "id": "257e23af-ca83-43ce-be4a-806c9a02b222",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output.scenarios",
+        "include": "noOtherFields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        0
+      ],
+      "id": "cd21be1c-9946-4737-b86a-730334743b33",
+      "name": "Split Out - Scenarios"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "sheet",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "REPLACE_WITH_REQUIREMENT_TESTCASES_SPREADSHEET_ID"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "RequirementTestCases"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "jira_key": "={{ $json.jira_key }}",
+            "feature_title": "={{ $json.feature_title }}",
+            "scenario_id": "={{ $json.scenario_id }}",
+            "scenario_title": "={{ $json.scenario_title }}",
+            "scenario_type": "={{ $json.scenario_type }}",
+            "priority": "={{ $json.priority }}",
+            "gherkin": "={{ $json.gherkin }}",
+            "preconditions": "={{ $json.preconditions }}",
+            "test_data": "={{ $json.test_data }}",
+            "expected_result": "={{ $json.expected_result }}",
+            "requirement_ref": "={{ $json.requirement_ref }}",
+            "automation_candidate": "={{ $json.automation_candidate }}",
+            "review_status": "={{ $json.review_status }}",
+            "source_system": "Webhook + Jira",
+            "created_at": "={{ $now.toISO() }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "jira_key",
+              "displayName": "jira_key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "feature_title",
+              "displayName": "feature_title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "scenario_id",
+              "displayName": "scenario_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "scenario_title",
+              "displayName": "scenario_title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "scenario_type",
+              "displayName": "scenario_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "gherkin",
+              "displayName": "gherkin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "preconditions",
+              "displayName": "preconditions",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "test_data",
+              "displayName": "test_data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "expected_result",
+              "displayName": "expected_result",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "requirement_ref",
+              "displayName": "requirement_ref",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "automation_candidate",
+              "displayName": "automation_candidate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "review_status",
+              "displayName": "review_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "source_system",
+              "displayName": "source_system",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1344,
+        0
+      ],
+      "id": "ef7834a0-ad26-4ae7-9031-997c002d716c",
+      "name": "Google Sheets - Append Test Cases",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_WITH_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook - New Requirement": {
+      "main": [
+        [
+          {
+            "node": "IF - Issue Key Present",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF - Issue Key Present": {
+      "main": [
+        [
+          {
+            "node": "Jira - Get User Story",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation - Missing Issue Key",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Jira - Get User Story": {
+      "main": [
+        [
+          {
+            "node": "Code - Normalize Jira Story",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code - Normalize Jira Story": {
+      "main": [
+        [
+          {
+            "node": "AI Agent - Requirement to Gherkin",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent - Requirement to Gherkin",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent - Requirement to Gherkin",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent - Requirement to Gherkin": {
+      "main": [
+        [
+          {
+            "node": "Split Out - Scenarios",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out - Scenarios": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Append Test Cases",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "9d5c3960-6091-4609-813c-3ddcdbb1a019",
+  "meta": {
+    "instanceId": "4a9cd20779731114053eeacffeada0ce6a101d8e655a6510586ca8037f57f455"
+  },
+  "nodeGroups": [],
+  "id": "er1reLhtoS2yyJDn",
+  "tags": []
+}

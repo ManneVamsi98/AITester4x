@@ -1,0 +1,332 @@
+{
+  "name": "10_CICDFailureAnalysis",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Smart CI/CD Failure Analysis\n\nA CI system POSTs a failed build. The workflow fetches the raw log, trims it to the signal, and an AI agent explains *why it failed* in plain English, then posts the RCA to Slack.\n\nAccepts any CI that can POST a callback (Jenkins, CircleCI, GitHub Actions, GitLab CI).",
+        "height": 288,
+        "width": 336,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        -304
+      ],
+      "typeVersion": 1,
+      "id": "2aa04607-2320-4f33-ba7a-8e5cea672fc3",
+      "name": "Sticky Note - CI Failure Analysis"
+    },
+    {
+      "parameters": {
+        "content": "## Output\n\nRoot cause analysis posted to Slack.",
+        "height": 288,
+        "width": 304,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1120,
+        -304
+      ],
+      "typeVersion": 1,
+      "id": "4c493061-5ec5-4e1c-afdd-cbb528ce892b",
+      "name": "Sticky Note - Output"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ci-failure-analysis",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "fd6d1d95-a063-42ab-b3f9-0e3360302b6d",
+      "name": "Webhook - CI Failure Callback",
+      "webhookId": "5d631625-c059-44e4-9cbe-35459b625544"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "af8d63e6-3c76-4f5c-aa4d-d916bb08556b",
+              "leftValue": "={{ $json.body.logUrl }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": false,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "8c10ab0c-27a4-4a5f-80f1-86199f47c4ee",
+      "name": "IF - Log URL Present"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        448,
+        288
+      ],
+      "id": "618f5447-7883-4bb5-a37c-7709cda98516",
+      "name": "No Operation - Missing Log URL"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.body.logUrl }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text",
+              "outputPropertyName": "data"
+            }
+          },
+          "timeout": 60000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        448,
+        0
+      ],
+      "id": "2cb3d849-b839-4043-88d6-62bb9b969f0a",
+      "name": "HTTP Request - Fetch CI Logs",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_CI_LOG_CREDENTIAL_ID",
+          "name": "CI Log Header Auth"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "// Trim a raw CI log down to the signal.\n//\n// A failed build can emit thousands of lines. Sending the whole thing to the\n// model is slow, expensive, and buries the cause. So we:\n//   1. strip ANSI colour codes and drop pure progress noise (bars, percentages)\n//   2. always keep every line matching an error keyword - the actual failures\n//   3. keep a slice of the head (environment / setup context)\n//   4. keep a slice of the tail (where test runners print their summary)\n//   5. de-duplicate and cap the total size so we never blow the context window\n// Error lines are never dropped by the noise filter, so nothing that matters is lost.\n\nconst http = $input.first().json;\nconst body = $('Webhook - CI Failure Callback').first().json.body || {};\n\nconst ERROR_PATTERN = /(error|failed|failure|exception|traceback|assert|panic|fatal|timeout|timed out|refused|denied|unauthori[sz]ed|cannot|could not|not found|no such file|out of memory|npm err|segmentation fault)/i;\n\n// Pure progress noise: percentages, progress bars, chunk download counters.\nconst NOISE_PATTERN = /(\\d{1,3}%|\\[=+>?\\s*\\]|Downloading|Uploading|Progress \\()/;\n\nconst stripAnsi = (text) => text.replace(/\\u001b\\[[0-9;]*m/g, '');\n\nconst raw = typeof http.data === 'string' ? http.data : JSON.stringify(http.data || '');\nconst rawLines = stripAnsi(raw).split(/\\r?\\n/);\n\nconst totalLines = rawLines.length;\nconst errorLines = rawLines.filter((line) => ERROR_PATTERN.test(line));\n\n// Drop noise unless the line is an error (errors always win).\nconst signalLines = rawLines.filter((line) => ERROR_PATTERN.test(line) || !NOISE_PATTERN.test(line));\nconst noiseLinesRemoved = totalLines - signalLines.length;\n\nconst HEAD_LINES = 30;\nconst TAIL_LINES = 160;\nconst head = signalLines.slice(0, HEAD_LINES);\nconst tail = signalLines.slice(Math.max(HEAD_LINES, signalLines.length - TAIL_LINES));\n\n// De-duplicate while preserving first-seen order to strip repeated stack frames.\nconst picked = [];\nconst seen = new Set();\nfor (const line of [...head, ...errorLines, ...tail]) {\n  if (seen.has(line)) continue;\n  seen.add(line);\n  picked.push(line);\n}\n\nconst MAX_CHARS = 14000;\nlet excerpt = picked.join('\\n');\nconst truncated = excerpt.length > MAX_CHARS;\nif (truncated) excerpt = excerpt.slice(0, MAX_CHARS);\n\nreturn [\n  {\n    json: {\n      job_name: body.jobName || 'Not specified',\n      build_url: body.buildUrl || '',\n      branch: body.branch || 'Not specified',\n      commit: body.commit || 'Not specified',\n      ci_status: body.status || 'FAILURE',\n      log_url: body.logUrl || '',\n      total_lines: totalLines,\n      error_line_count: errorLines.length,\n      noise_lines_removed: noiseLinesRemoved,\n      excerpt_lines: picked.length,\n      truncated,\n      log_excerpt: excerpt || 'Not specified',\n      error_lines_excerpt: errorLines.slice(-40).join('\\n') || 'Not specified',\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        0
+      ],
+      "id": "0bf1344f-0324-4958-b05d-b6f40b8927ad",
+      "name": "Code - Trim & Normalize Logs"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Analyse this CI failure and explain why the build failed.\n\nJob: {{ $json.job_name }}\nCI Status: {{ $json.ci_status }}\nBranch: {{ $json.branch }}\nCommit: {{ $json.commit }}\nBuild URL: {{ $json.build_url }}\n\nLog size: {{ $json.total_lines }} lines total, {{ $json.error_line_count }} lines matched error keywords.\nExcerpt truncated: {{ $json.truncated }}\n\nLines that matched error keywords:\n{{ $json.error_lines_excerpt }}\n\nLog excerpt:\n{{ $json.log_excerpt }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are a senior CI/CD reliability engineer who specialises in reading build logs and identifying the true cause of a pipeline failure quickly. You have debugged tens of thousands of failed builds across Jenkins, CircleCI, GitHub Actions, and GitLab CI, for Java, Node.js, Python, Go, and mobile projects.\n\nYour job:\nGiven the metadata and an excerpt of a failed CI build log, produce a concise, evidence-based Root Cause Analysis that a busy automation engineer can act on in under a minute.\n\nRules (strict):\n1. Base every statement on the log excerpt provided. Never invent a stack trace, file name, line number, error code, dependency version, or test name that is not in the excerpt.\n2. If the excerpt does not contain enough information to determine the cause, set failure_category to \"Unknown\", confidence to \"Low\", and write \"Insufficient information in the provided excerpt\" in root_cause. Do not guess.\n3. Quote exact lines from the log in the evidence field. Copy them verbatim; do not paraphrase or tidy them up.\n4. Prefer the earliest genuine error over the loudest one. Later errors are often cascades of the first failure.\n5. Distinguish a real code failure from a flaky or environmental one (network timeouts, rate limits, transient DNS, out of disk, flaky test retries). Say which it is and why.\n6. Ignore routine noise. Progress bars, download percentages, passing test lines, and bare timestamps are not evidence.\n7. why_it_failed is the most important field. Write 2 to 4 plain sentences a non-specialist can follow, leading with the cause rather than the symptom.\n8. suggested_fix must be concrete, ordered steps (1. 2. 3.) that address the root cause. If the correct action is simply to re-run because the failure was transient, say so explicitly.\n9. confidence must be exactly one of: High, Medium, Low.\n10. failure_category must be exactly one of: Build Error, Compile Error, Test Failure, Dependency or Network, Infrastructure or Timeout, Configuration, Environment or Permissions, Flaky Test, Unknown.\n11. flaky_suspected must start with \"Yes\" or \"No\" followed by a short reason.\n12. review_status must always be exactly \"Draft - Requires Engineer Review\".\n\nOutput contract:\nReturn ONLY a single JSON object that conforms to the structured output schema. No markdown, no code fences, no commentary, and no extra fields."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        896,
+        0
+      ],
+      "id": "b1235cd3-60bf-4427-9ad5-bdb917554c00",
+      "name": "AI Agent - CI Failure RCA"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        768,
+        240
+      ],
+      "id": "11b13ce5-bdbb-43d0-9aba-18d6622c8831",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "REPLACE_WITH_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\"type\":\"object\",\"properties\":{\"job_name\":{\"type\":\"string\"},\"failure_category\":{\"type\":\"string\"},\"confidence\":{\"type\":\"string\"},\"why_it_failed\":{\"type\":\"string\"},\"root_cause\":{\"type\":\"string\"},\"evidence\":{\"type\":\"string\"},\"first_error_line\":{\"type\":\"string\"},\"affected_component\":{\"type\":\"string\"},\"suggested_fix\":{\"type\":\"string\"},\"prevention\":{\"type\":\"string\"},\"flaky_suspected\":{\"type\":\"string\"},\"review_status\":{\"type\":\"string\"}},\"required\":[\"job_name\",\"failure_category\",\"confidence\",\"why_it_failed\",\"root_cause\",\"evidence\",\"first_error_line\",\"affected_component\",\"suggested_fix\",\"prevention\",\"flaky_suspected\",\"review_status\"]}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1024,
+        240
+      ],
+      "id": "c492767e-aa95-4b53-96ef-1c4b5a573989",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "authentication": "accessToken",
+        "resource": "message",
+        "operation": "post",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "#ci-failures"
+        },
+        "messageType": "text",
+        "text": "=:rotating_light: *CI Failure RCA* - {{ $json.output.job_name }}\n\n*Verdict:* {{ $json.output.failure_category }} (confidence {{ $json.output.confidence }})\n*Flaky suspected:* {{ $json.output.flaky_suspected }}\n\n*Why it failed*\n{{ $json.output.why_it_failed }}\n\n*Root cause*\n{{ $json.output.root_cause }}\n\n*Evidence*\n{{ $json.output.evidence }}\n\n*First error line*\n`{{ $json.output.first_error_line }}`\n\n*Affected component*\n{{ $json.output.affected_component }}\n\n*Suggested fix*\n{{ $json.output.suggested_fix }}\n\n*Prevention*\n{{ $json.output.prevention }}\n\n<{{ $('Code - Trim & Normalize Logs').item.json.log_url }}|View full logs> | Build: {{ $('Code - Trim & Normalize Logs').item.json.build_url }}\n_{{ $json.output.review_status }}_",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.7,
+      "position": [
+        1120,
+        0
+      ],
+      "id": "894f088d-41f5-4764-9a33-79a447f7efe6",
+      "name": "Slack - Post RCA Summary",
+      "credentials": {
+        "slackApi": {
+          "id": "REPLACE_WITH_SLACK_CREDENTIAL_ID",
+          "name": "Slack account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook - CI Failure Callback": {
+      "main": [
+        [
+          {
+            "node": "IF - Log URL Present",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF - Log URL Present": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request - Fetch CI Logs",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation - Missing Log URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request - Fetch CI Logs": {
+      "main": [
+        [
+          {
+            "node": "Code - Trim & Normalize Logs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code - Trim & Normalize Logs": {
+      "main": [
+        [
+          {
+            "node": "AI Agent - CI Failure RCA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent - CI Failure RCA",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent - CI Failure RCA",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent - CI Failure RCA": {
+      "main": [
+        [
+          {
+            "node": "Slack - Post RCA Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "f6b49d5a-033a-49e6-badd-e510d41e181e",
+  "meta": {
+    "instanceId": "4a9cd20779731114053eeacffeada0ce6a101d8e655a6510586ca8037f57f455"
+  },
+  "nodeGroups": [],
+  "id": "Q2rNtJtiJQ2v3baJ",
+  "tags": []
+}
