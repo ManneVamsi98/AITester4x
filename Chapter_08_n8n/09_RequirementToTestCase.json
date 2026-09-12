@@ -37,7 +37,7 @@
       "parameters": {
         "httpMethod": "POST",
         "path": "requirement-to-testcases",
-        "responseMode": "onReceived",
+        "responseMode": "lastNode",
         "options": {}
       },
       "type": "n8n-nodes-base.webhook",
@@ -116,7 +116,7 @@
       "name": "Jira - Get User Story",
       "credentials": {
         "jiraSoftwareCloudApi": {
-          "id": "REPLACE_WITH_JIRA_CREDENTIAL_ID",
+          "id": "W7jysTa1ulEeRiIc",
           "name": "Jira SW Cloud account"
         }
       }
@@ -156,26 +156,21 @@
     },
     {
       "parameters": {
-        "model": {
-          "__rl": true,
-          "mode": "list",
-          "value": "gpt-5-mini"
-        },
-        "builtInTools": {},
+        "model": "qwen/qwen3.8-27b",
         "options": {}
       },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
-      "typeVersion": 1.3,
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
       "position": [
         768,
         240
       ],
       "id": "d7b3c2b3-39ab-4dcd-84ed-55c36e17471e",
-      "name": "OpenAI Chat Model",
+      "name": "Groq Chat Model",
       "credentials": {
-        "openAiApi": {
-          "id": "REPLACE_WITH_OPENAI_CREDENTIAL_ID",
-          "name": "OpenAI account"
+        "groqApi": {
+          "id": "6oNfa0j1GMUuPjrw",
+          "name": "Groq account"
         }
       }
     },
@@ -216,12 +211,12 @@
         "documentId": {
           "__rl": true,
           "mode": "id",
-          "value": "REPLACE_WITH_REQUIREMENT_TESTCASES_SPREADSHEET_ID"
+          "value": "11gYR4pVm1Oi-hbDyZI-r_dEqWhbRyGLlQrmR-Df75nQ"
         },
         "sheetName": {
           "__rl": true,
-          "mode": "name",
-          "value": "RequirementTestCases"
+          "mode": "id",
+          "value": "0"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -410,7 +405,7 @@
       "name": "Google Sheets - Append Test Cases",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "REPLACE_WITH_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "id": "mcPHFSvFddBHJBFW",
           "name": "Google Sheets account"
         }
       }
@@ -469,7 +464,7 @@
         ]
       ]
     },
-    "OpenAI Chat Model": {
+    "Groq Chat Model": {
       "ai_languageModel": [
         [
           {
