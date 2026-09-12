@@ -10,16 +10,15 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        0,
-        -240
+        -160,
+        592
       ],
       "typeVersion": 1,
-      "id": "a4f81cd0-c748-4010-9bf6-23f84941a21a",
-      "name": "Sticky Note - Regression Test Draft"
+      "id": "e0548d63-17ea-41c8-81ea-4e4c94077f29",
+      "name": "Sticky Note - Regression Test Draft1"
     },
     {
       "parameters": {
-        "jiraVersion": "cloud",
         "events": [
           "jira:issue_created",
           "jira:issue_updated"
@@ -31,15 +30,15 @@
       "type": "n8n-nodes-base.jiraTrigger",
       "typeVersion": 1.1,
       "position": [
-        0,
-        0
+        -160,
+        832
       ],
-      "id": "ee198b9a-c82e-4392-82f1-6c84afdaec03",
-      "name": "Jira Trigger - Production Bug",
+      "id": "0bfe7aef-8f83-4aa9-a5f9-03e144721a3b",
+      "name": "Jira Trigger - Production Bug1",
       "webhookId": "484441a3-0264-45dd-95c7-cd8e66e95bbd",
       "credentials": {
         "jiraSoftwareCloudApi": {
-          "id": "REPLACE_WITH_JIRA_CREDENTIAL_ID",
+          "id": "W7jysTa1ulEeRiIc",
           "name": "Jira SW Cloud account"
         }
       }
@@ -56,37 +55,11 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        384,
-        0
+        224,
+        832
       ],
-      "id": "44d2b9c5-b121-4d42-a037-b280c1e5c3de",
-      "name": "AI Agent - Regression Test Writer"
-    },
-    {
-      "parameters": {
-        "model": {
-          "__rl": true,
-          "mode": "list",
-          "value": "gpt-5-mini"
-        },
-        "builtInTools": {},
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
-      "typeVersion": 1.3,
-      "position": [
-        256,
-        208
-      ],
-      "id": "9ec735f9-27bf-4d89-8e7b-804f0e4956ba",
-      "name": "OpenAI Chat Model",
-      "credentials": {
-        "openAiApi": {
-          "id": null,
-          "name": "",
-          "__aiGatewayManaged": true
-        }
-      }
+      "id": "aabadc87-223f-429d-8f4d-40866a66d816",
+      "name": "AI Agent - Regression Test Writer1"
     },
     {
       "parameters": {
@@ -96,26 +69,24 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        544,
-        208
+        384,
+        1040
       ],
-      "id": "cdce7f47-a53c-4a35-87a9-06140dee6fac",
-      "name": "Structured Output Parser"
+      "id": "52e36702-a2d4-4763-8331-9f9a89b42bf3",
+      "name": "Structured Output Parser1"
     },
     {
       "parameters": {
-        "authentication": "oAuth2",
-        "resource": "sheet",
         "operation": "append",
         "documentId": {
           "__rl": true,
           "mode": "id",
-          "value": "REPLACE_WITH_REGRESSION_TESTS_SPREADSHEET_ID"
+          "value": "1UFt75AMlEt6Qe69xJ1a6Jt3lvsh1MftiLaIp4XjmD7M"
         },
         "sheetName": {
           "__rl": true,
-          "mode": "name",
-          "value": "RegressionTests"
+          "mode": "id",
+          "value": "0"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -308,60 +279,80 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        768,
-        0
+        608,
+        832
       ],
-      "id": "69b2c26f-7fc0-4051-b2e2-ba0d74da679b",
-      "name": "Google Sheets - Create Regression Test Case",
+      "id": "96634e6a-3df8-4b6b-86a0-4f867be15862",
+      "name": "Google Sheets - Create Regression Test Case1",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "REPLACE_WITH_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "id": "mcPHFSvFddBHJBFW",
           "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "qwen/qwen3.8-27b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        80,
+        1040
+      ],
+      "id": "111695b2-f68c-4d93-a985-6f80f7873b6d",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "6oNfa0j1GMUuPjrw",
+          "name": "Groq account"
         }
       }
     }
   ],
   "pinData": {},
   "connections": {
-    "Jira Trigger - Production Bug": {
+    "Jira Trigger - Production Bug1": {
       "main": [
         [
           {
-            "node": "AI Agent - Regression Test Writer",
+            "node": "AI Agent - Regression Test Writer1",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "AI Agent - Regression Test Writer": {
+    "AI Agent - Regression Test Writer1": {
       "main": [
         [
           {
-            "node": "Google Sheets - Create Regression Test Case",
+            "node": "Google Sheets - Create Regression Test Case1",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "OpenAI Chat Model": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "AI Agent - Regression Test Writer",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Structured Output Parser": {
+    "Structured Output Parser1": {
       "ai_outputParser": [
         [
           {
-            "node": "AI Agent - Regression Test Writer",
+            "node": "AI Agent - Regression Test Writer1",
             "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent - Regression Test Writer1",
+            "type": "ai_languageModel",
             "index": 0
           }
         ]
@@ -373,12 +364,12 @@
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "f1e0e419-017c-454b-8caf-0a30a46dc572",
+  "versionId": "840485d0-73f1-429c-b6c5-ffbe2beee4b4",
   "meta": {
-    "instanceId": "4a9cd20779731114053eeacffeada0ce6a101d8e655a6510586ca8037f57f455",
-    "templateCredsSetupCompleted": true
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4a9cd20779731114053eeacffeada0ce6a101d8e655a6510586ca8037f57f455"
   },
   "nodeGroups": [],
-  "id": "eKEFMEe7TPMq2j5D",
+  "id": "mMUTuJt0e61haePH",
   "tags": []
 }
