@@ -10,6 +10,11 @@ This chapter explores **Langflow** — a low-code, visual framework for building
 | `Sample workflow.json` | A minimal Chat Input → Groq → Chat Output flow. |
 | `Bug Triage AI Agent.json` | Agent flow that triages Jira bugs and writes each result to Google Sheets. |
 | `build_bug_triage_flow.py` | Regenerates `Bug Triage AI Agent.json` from Langflow's own component registry. |
+| `flaky_analyze.py` | Compares two Playwright JSON reports and counts the flaky test cases. |
+| `Flaky Analyzer.json` | Langflow flow that runs the flaky analyzer from Langflow's UI. |
+| `flaky_analyzer_component.py` | The Langflow custom component behind `Flaky Analyzer.json`. |
+| `build_flaky_analyzer_flow.py` | Regenerates `Flaky Analyzer.json`, and pushes it with `--push`. |
+| `Flaky_Test_Analyzer.md` | How the flaky analyzer defines flakiness, plus usage, exit codes, and the UI. |
 
 ## Local setup (this machine)
 
