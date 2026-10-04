@@ -23,10 +23,36 @@ def make_point_id(point_key: str) -> str:
     return str(uuid.uuid5(_POINT_NAMESPACE, point_key))
 
 
-def client_from(settings):
+def client_from(settings, cloud: bool = False):
     from qdrant_client import QdrantClient
 
+    if cloud:
+        return QdrantClient(
+            url=settings.qdrant_cloud_url,
+            api_key=settings.qdrant_api_key,
+            cloud_inference=True,
+        )
     return QdrantClient(url=settings.qdrant_url)
+
+
+def ensure_payload_indexes(client, name: str) -> None:
+    """Keyword indexes for the fields we filter on.
+
+    Qdrant requires an index before a field can be used in a filter, so create
+    these up front; ignore "already exists" on re-runs.
+    """
+    from qdrant_client import models as qm
+
+    for field in ("source_type", "repo"):
+        try:
+            client.create_payload_index(
+                collection_name=name,
+                field_name=field,
+                field_schema=qm.PayloadSchemaType.KEYWORD,
+                wait=True,
+            )
+        except Exception:
+            pass
 
 
 def ensure_collection(client, name: str, dim: int) -> None:
@@ -38,6 +64,7 @@ def ensure_collection(client, name: str, dim: int) -> None:
             vectors_config={DENSE: qm.VectorParams(size=dim, distance=qm.Distance.COSINE)},
             sparse_vectors_config={SPARSE: qm.SparseVectorParams()},
         )
+        ensure_payload_indexes(client, name)
         return
 
     info = client.get_collection(name)
@@ -49,6 +76,7 @@ def ensure_collection(client, name: str, dim: int) -> None:
             "Re-embed with the matching model, or delete the collection and re-ingest "
             "(e.g. set QDRANT_COLLECTION to a new name)."
         )
+    ensure_payload_indexes(client, name)
 
 
 def _to_sparse_vector(sparse: Sparse):
@@ -83,6 +111,50 @@ def upsert_chunks(client, collection: str, chunks: list[dict], embedder, batch_s
                 qm.PointStruct(
                     id=make_point_id(chunk["point_key"]),
                     vector={DENSE: dense, SPARSE: _to_sparse_vector(sparse)},
+                    payload=payload,
+                )
+            )
+        client.upsert(collection_name=collection, points=points, wait=True)
+        total += len(points)
+    return total
+
+
+def ensure_cloud_collection(client, name: str, dim: int) -> None:
+    """Create a Cloud-Inference collection with a single unnamed vector.
+
+    Cloud Inference writes a ``Document(text, model)`` as the point's vector, so
+    the collection must use one unnamed vector (not the named dense+sparse pair
+    used by the local, self-embedded collection).
+    """
+    from qdrant_client import models as qm
+
+    if not client.collection_exists(name):
+        client.create_collection(
+            collection_name=name,
+            vectors_config=qm.VectorParams(size=dim, distance=qm.Distance.COSINE),
+        )
+    ensure_payload_indexes(client, name)
+
+
+def cloud_upsert_chunks(client, collection: str, chunks: list[dict], model: str, batch_size: int = 64) -> int:
+    """Upsert into Qdrant Cloud letting its Inference API embed the text.
+
+    The point vector is a ``Document(text, model)`` rather than a precomputed
+    vector, so the free hosted embedding models do the work server-side.
+    """
+    from qdrant_client import models as qm
+
+    total = 0
+    for start in range(0, len(chunks), batch_size):
+        batch = chunks[start : start + batch_size]
+        points = []
+        for chunk in batch:
+            payload = _clean(chunk.get("metadata", {}))
+            payload["text"] = chunk["text"]
+            points.append(
+                qm.PointStruct(
+                    id=make_point_id(chunk["point_key"]),
+                    vector=qm.Document(text=chunk["text"], model=model),
                     payload=payload,
                 )
             )

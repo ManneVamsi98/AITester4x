@@ -181,6 +181,26 @@ An unsupported question must return *"Insufficient evidence in the knowledge bas
 
 ---
 
+## Deploy to Vercel (hosted demo)
+
+A Vercel-native version lives in [`web/`](./web): a static UI + one serverless function that uses
+**Qdrant Cloud** (free cluster with **Cloud Inference** — embeddings computed server-side, so no
+extra vendor) and **Groq**. It is dense-only with `sentence-transformers/all-MiniLM-L6-v2`; the
+self-hosted app below keeps the fully open-source bge-m3 hybrid stack.
+
+```bash
+# 1. Add QDRANT_CLOUD_URL and QDRANT_API_KEY to .env, then populate the cloud index
+python scripts/ingest_cloud.py
+
+# 2. Deploy web/ to Vercel as project "qabuddy"
+cd web
+npx vercel link --yes --project qabuddy
+npx vercel env add QDRANT_URL production      # then QDRANT_API_KEY, GROQ_KEY, ...
+npx vercel --prod
+```
+
+---
+
 ## Deploying to a droplet (24x7)
 
 ```bash
@@ -209,9 +229,10 @@ Chapter_12_RAG_QA_BuddyAI/
 ├─ app.py                 Streamlit chatbot
 ├─ qabuddy/               config, embeddings, sparse, qdrant_store, chunking,
 │                         ingest/*, retrieval, rag, cli
-├─ scripts/               ingest_all.py, eval_retrieval.py
+├─ scripts/               ingest_all.py, ingest_cloud.py, eval_retrieval.py
 ├─ tests/                 dependency-free pipeline tests
 ├─ data/01..10/           source folders (each with its own README)
+├─ web/                   Vercel hosted demo (static UI + /api/ask serverless fn)
 ├─ docker-compose.yml · Dockerfile · requirements.txt
 └─ plan.md · prompt.md · README.md
 ```

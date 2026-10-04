@@ -25,6 +25,23 @@ def _get(name: str, default: str = "") -> str:
     return value if value not in (None, "") else default
 
 
+def _get_any(names: list[str], default: str = "") -> str:
+    """First non-empty value among ``names`` (case-insensitive)."""
+    lowered = {key.lower(): value for key, value in os.environ.items()}
+    for name in names:
+        value = lowered.get(name.lower())
+        if value:
+            return value
+    return default
+
+
+def _url(value: str) -> str:
+    value = (value or "").strip().strip('"').strip("'").rstrip("/")
+    if value and not value.startswith(("http://", "https://")):
+        value = "https://" + value
+    return value
+
+
 def _bool(name: str, default: bool) -> bool:
     value = os.getenv(name)
     if value is None:
@@ -48,6 +65,9 @@ class Settings:
     groq_model: str
     qdrant_url: str
     collection: str
+    qdrant_cloud_url: str
+    qdrant_api_key: str
+    cloud_embed_model: str
     embed_provider: str
     embed_model: str
     ollama_url: str
@@ -70,6 +90,11 @@ class Settings:
             groq_model=_get("GROQ_MODEL", "openai/gpt-oss-120b"),
             qdrant_url=_get("QDRANT_URL", "http://localhost:6333"),
             collection=_get("QDRANT_COLLECTION", "qabuddy"),
+            qdrant_cloud_url=_url(
+                _get_any(["QDRANT_CLOUD_URL", "QDRANT_CLUSTER_ENDPOINT", "QDRANT_ENDPOINT"])
+            ),
+            qdrant_api_key=_get_any(["QDRANT_API_KEY"]),
+            cloud_embed_model=_get("CLOUD_EMBED_MODEL", "sentence-transformers/all-MiniLM-L6-v2"),
             embed_provider=_get("EMBED_PROVIDER", "bge_m3").lower(),
             embed_model=_get("EMBED_MODEL", "BAAI/bge-m3"),
             ollama_url=_get("OLLAMA_URL", "http://localhost:11434"),

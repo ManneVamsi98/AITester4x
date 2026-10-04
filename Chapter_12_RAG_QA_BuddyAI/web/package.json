@@ -1,0 +1,9 @@
+{
+  "name": "qabuddy",
+  "version": "1.0.0",
+  "private": true,
+  "description": "QABuddy.ai — hosted Q&A over the QA knowledge base (Qdrant Cloud + Groq)",
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>QABuddy.ai</title>
+<style>
+  :root {
+    --indigo: #4f46e5; --violet: #7c3aed; --sky: #0ea5e9;
+    --bg: #0b1020; --panel: rgba(255,255,255,.06); --border: rgba(255,255,255,.14);
+    --text: #e8eaf3; --muted: #a3a8c3;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; color: var(--text);
+    background: radial-gradient(1200px 600px at 20% -10%, #1e2450 0%, var(--bg) 55%) fixed;
+    font: 15px/1.55 "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 26px 18px 120px; }
+
+  .hero {
+    background: linear-gradient(120deg, var(--indigo) 0%, var(--violet) 48%, var(--sky) 100%);
+    border-radius: 18px; padding: 22px 26px; color: #fff;
+    box-shadow: 0 14px 34px rgba(79,70,229,.30);
+  }
+  .hero h1 { margin: 0; font-size: 1.95rem; letter-spacing: -.02em; font-weight: 800; }
+  .hero p { margin: .4rem 0 .8rem; opacity: .93; max-width: 62ch; font-size: .95rem; }
+  .pill {
+    display: inline-block; padding: 3px 11px; border-radius: 999px; font-size: .74rem;
+    font-weight: 600; margin: 0 6px 0 0; background: rgba(255,255,255,.18);
+    border: 1px solid rgba(255,255,255,.30);
+  }
+  .pill.demo { background: rgba(250,204,21,.22); border-color: rgba(250,204,21,.55); }
+  [hidden] { display: none !important; }
+
+  .filters { margin: 16px 2px 6px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .filters .lead { color: var(--muted); font-size: .8rem; margin-right: 4px; }
+  .chip {
+    cursor: pointer; user-select: none; padding: 4px 12px; border-radius: 999px;
+    font-size: .78rem; font-weight: 600; color: var(--muted);
+    border: 1px solid var(--border); background: transparent;
+  }
+  .chip.on { color: #fff; background: rgba(79,70,229,.55); border-color: rgba(124,58,237,.7); }
+
+  .chat { margin-top: 14px; display: flex; flex-direction: column; gap: 14px; }
+  .empty { text-align: center; color: var(--muted); padding: 26px 0 6px; }
+  .examples { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 720px; margin: 12px auto 0; }
+  .examples button {
+    cursor: pointer; text-align: left; padding: 11px 13px; border-radius: 12px;
+    background: var(--panel); border: 1px solid var(--border); color: var(--text); font-size: .84rem;
+  }
+  .examples button:hover { border-color: rgba(124,58,237,.7); }
+
+  .msg { display: flex; gap: 10px; }
+  .msg .avatar { flex: 0 0 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
+    font-size: .95rem; background: var(--panel); border: 1px solid var(--border); }
+  .bubble { flex: 1; background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+    padding: 12px 15px; white-space: pre-wrap; word-wrap: break-word; }
+  .msg.user .bubble { background: rgba(79,70,229,.16); }
+  .bubble code { background: rgba(0,0,0,.28); padding: 1px 5px; border-radius: 5px; font-size: .85em; }
+  .bubble strong { color: #fff; }
+
+  details.cites { margin-top: 10px; }
+  details.cites summary { cursor: pointer; color: var(--muted); font-size: .82rem; }
+  .card { display: flex; align-items: center; gap: 9px; padding: 10px 12px; margin: 8px 0;
+    border: 1px solid var(--border); border-radius: 12px; background: rgba(127,127,160,.07); }
+  .badge { min-width: 20px; text-align: center; padding: 2px 8px; border-radius: 8px;
+    background: var(--indigo); color: #fff; font-weight: 700; font-size: .73rem; }
+  .src { font-weight: 650; }
+  .type { padding: 1px 9px; border-radius: 999px; font-size: .69rem; font-weight: 700;
+    background: rgba(14,165,233,.16); color: #7dd3fc; }
+  .score { margin-left: auto; font-size: .71rem; color: var(--muted); }
+  .card pre { flex-basis: 100%; margin: 6px 0 0; padding: 8px 10px; overflow: auto; max-height: 180px;
+    background: rgba(0,0,0,.25); border-radius: 8px; font-size: .74rem; color: var(--muted); }
+
+  .composer { position: fixed; left: 0; right: 0; bottom: 0; padding: 14px 18px 18px;
+    background: linear-gradient(180deg, rgba(11,16,32,0), rgba(11,16,32,.92) 40%); }
+  .composer form { max-width: 900px; margin: 0 auto; display: flex; gap: 10px; }
+  .composer input {
+    flex: 1; padding: 13px 15px; border-radius: 12px; color: var(--text); font-size: .95rem;
+    background: #141a33; border: 1px solid var(--border); outline: none;
+  }
+  .composer input:focus { border-color: rgba(124,58,237,.8); }
+  .composer button {
+    padding: 0 22px; border: 0; border-radius: 12px; cursor: pointer; font-weight: 700; color: #fff;
+    background: linear-gradient(120deg, var(--indigo), var(--violet));
+  }
+  .composer button:disabled { opacity: .6; cursor: default; }
+  .err { color: #fca5a5; }
+  @media (max-width: 620px) { .examples { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <h1>QABuddy.ai</h1>
+    <p>One cited answer across test cases, JIRA, framework code, PRDs, docs, meeting notes, charts and CI logs.</p>
+    <span class="pill demo" id="pill-demo" hidden>Demo mode</span>
+    <span class="pill" id="pill-embed">embeddings</span>
+    <span class="pill" id="pill-model">Groq</span>
+  </header>
+
+  <div class="filters" id="filters"><span class="lead">Sources:</span></div>
+
+  <main class="chat" id="chat">
+    <div class="empty" id="empty">
+      <p id="empty-text">Ask a question, or start with one of these:</p>
+      <div class="examples" id="examples"></div>
+    </div>
+  </main>
+</div>
+
+<div class="composer">
+  <form id="composer">
+    <input id="question" autocomplete="off" placeholder="Ask about a test case, a bug, framework code, or a requirement…" />
+    <button type="submit" id="send">Ask</button>
+  </form>
+</div>
+
+<script>
+const SOURCE_TYPES = {
+  test_case: "Test cases", jira: "JIRA", code: "Framework code", document: "Docs / PRD",
+  transcript: "Meeting notes", diagram: "Lucid charts", jenkins_log: "Jenkins logs",
+};
+const FALLBACK_EXAMPLES = [
+  "What is the VWO-26 login failure about?",
+  "test case for verifying the login page load",
+  "CI login tests failing because of the IP address",
+  "How do I write a page object in the Selenium framework?",
+];
+
+const selected = new Set(Object.keys(SOURCE_TYPES));
+const chat = document.getElementById("chat");
+const empty = document.getElementById("empty");
+const question = document.getElementById("question");
+const send = document.getElementById("send");
+
+function esc(value) {
+  return String(value ?? "").replace(/[&<>"']/g, (c) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+// Minimal, safe markdown (input is escaped first, so no HTML can be injected).
+function mdToHtml(text) {
+  return esc(text)
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/`([^`]+)`/g, "<code>$1</code>")
+    .replace(/^\s*[-*]\s+(.*)$/gm, "• $1");
+}
+
+// source filter chips
+const filters = document.getElementById("filters");
+Object.entries(SOURCE_TYPES).forEach(([key, text]) => {
+  const chip = document.createElement("span");
+  chip.className = "chip on";
+  chip.textContent = text;
+  chip.onclick = () => {
+    if (selected.has(key)) { selected.delete(key); chip.classList.remove("on"); }
+    else { selected.add(key); chip.classList.add("on"); }
+  };
+  filters.appendChild(chip);
+});
+
+function renderExamples(list) {
+  const box = document.getElementById("examples");
+  box.innerHTML = "";
+  list.forEach((text) => {
+    const button = document.createElement("button");
+    button.textContent = text;
+    button.onclick = () => { question.value = text; document.getElementById("composer").requestSubmit(); };
+    box.appendChild(button);
+  });
+}
+
+function addMessage(role, html) {
+  const wrap = document.createElement("div");
+  wrap.className = `msg ${role}`;
+  wrap.innerHTML =
+    `<div class="avatar">${role === "user" ? "🧑‍💻" : "🤖"}</div>` +
+    `<div class="bubble">${html}</div>`;
+  chat.appendChild(wrap);
+  window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+  return wrap.querySelector(".bubble");
+}
+
+function renderCitations(bubble, citations) {
+  if (!citations || citations.length === 0) return;
+  const cards = citations.map((c) => `
+    <div class="card">
+      <span class="badge">${c.n}</span>
+      <span class="src">${esc(c.source)}</span>
+      <span class="type">${esc(SOURCE_TYPES[c.type] || c.type || "")}</span>
+      <span class="score">score ${Number(c.score || 0).toFixed(3)}</span>
+      <pre>${esc(c.snippet)}</pre>
+    </div>`).join("");
+  const box = document.createElement("details");
+  box.className = "cites";
+  box.innerHTML = `<summary>📎 Citations (${citations.length})</summary>${cards}`;
+  bubble.appendChild(box);
+}
+
+async function ask(text) {
+  if (empty) empty.remove();
+  addMessage("user", esc(text));
+  const bubble = addMessage("assistant", "Retrieving…");
+  send.disabled = true;
+  try {
+    const response = await fetch("/api/ask", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ question: text, sources: [...selected] }),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || `HTTP ${response.status}`);
+    bubble.innerHTML = mdToHtml(data.answer);
+    renderCitations(bubble, data.citations);
+  } catch (error) {
+    bubble.innerHTML = `<span class="err">${esc(error.message || error)}</span>`;
+  } finally {
+    send.disabled = false;
+    question.focus();
+  }
+}
+
+// Discover mode + examples on load.
+(async function init() {
+  let examples = FALLBACK_EXAMPLES;
+  try {
+    const response = await fetch("/api/ask");
+    const info = await response.json();
+    if (info.demo) document.getElementById("pill-demo").hidden = false;
+    if (info.embedModel) document.getElementById("pill-embed").textContent = info.embedModel;
+    if (info.model) document.getElementById("pill-model").textContent = info.model;
+    if (Array.isArray(info.examples) && info.examples.length) examples = info.examples;
+  } catch (_) { /* API not reachable — keep fallbacks */ }
+  renderExamples(examples);
+})();
+
+document.getElementById("composer").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const text = question.value.trim();
+  if (!text) return;
+  question.value = "";
+  ask(text);
+});
+</script>
+</body>
+</html>

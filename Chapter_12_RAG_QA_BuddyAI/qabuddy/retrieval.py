@@ -67,15 +67,27 @@ class Retriever:
         top_k: int | None = None,
         limit: int | None = None,
     ) -> list[Retrieved]:
-        points = qdrant_store.hybrid_query(
-            self.client,
-            self.settings.collection,
-            self.embedder,
-            query,
+        args = dict(
             top_k=top_k or self.settings.top_k,
             source_types=source_types,
             repos=repos,
         )
+        try:
+            points = qdrant_store.hybrid_query(
+                self.client, self.settings.collection, self.embedder, query, **args
+            )
+        except Exception:
+            # A filtered field needs a payload index; fall back to an unfiltered
+            # search rather than failing the whole request.
+            if not (source_types or repos):
+                raise
+            points = qdrant_store.hybrid_query(
+                self.client,
+                self.settings.collection,
+                self.embedder,
+                query,
+                top_k=top_k or self.settings.top_k,
+            )
         results = [
             Retrieved(
                 text=(point.payload or {}).get("text", ""),
