@@ -1,0 +1,27 @@
+# Secrets — never commit
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Source data is user-provided and large; keep only the per-folder READMEs
+data/**
+!data/**/
+!data/**/README.md
+# Cloned framework repos are embedded git repos — never stage them as gitlinks
+data/**/repo/
+
+# Qdrant local storage + model cache
+qdrant_storage/
+.models/
+
+# Local tools (standalone Qdrant binary)
+.tools/
+
+# Generated reports / logs
+output/*
+!output/.gitkeep
+*.log

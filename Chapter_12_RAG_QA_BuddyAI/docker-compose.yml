@@ -1,0 +1,33 @@
+# QABuddy.ai — Qdrant + Streamlit app.
+# Local dev:      docker compose up -d --build      -> http://localhost:8501/
+# Ingest:         docker compose run --rm app python -m qabuddy.cli ingest --source all
+# The app talks to Qdrant over the compose network at http://qdrant:6333.
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:6333:6333"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      - qdrant
+    env_file:
+      - .env
+    environment:
+      QDRANT_URL: http://qdrant:6333
+    ports:
+      # Loopback only. On the droplet, put Caddy/nginx in front and expose 80/443.
+      - "127.0.0.1:8501:8501"
+    volumes:
+      - ./data:/app/data
+      - ./output:/app/output
+      - model_cache:/models
+
+volumes:
+  qdrant_storage:
+  model_cache:
