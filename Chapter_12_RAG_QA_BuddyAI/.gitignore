@@ -7,9 +7,9 @@ __pycache__/
 .venv/
 venv/
 
-# Sample source data ships with the demo. Cloned framework repos stay out —
-# they are embedded git repos with large traces/videos and a bundled .env.
-data/**/repo/
+# Framework source now ships as plain files (nested .git removed). Keep the
+# credential-bearing properties file out; .env is excluded by the rule above.
+data/01_selenium_framework/repo/src/main/resources/data.properties
 
 # Qdrant local storage + model cache
 qdrant_storage/
