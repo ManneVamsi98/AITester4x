@@ -7,11 +7,8 @@ __pycache__/
 .venv/
 venv/
 
-# Source data is user-provided and large; keep only the per-folder READMEs
-data/**
-!data/**/
-!data/**/README.md
-# Cloned framework repos are embedded git repos — never stage them as gitlinks
+# Sample source data ships with the demo. Cloned framework repos stay out —
+# they are embedded git repos with large traces/videos and a bundled .env.
 data/**/repo/
 
 # Qdrant local storage + model cache
@@ -25,3 +22,5 @@ qdrant_storage/
 output/*
 !output/.gitkeep
 *.log
+# ...but keep the sample Jenkins logs that ship with the demo data
+!data/10_jenkins_logs/*.log
