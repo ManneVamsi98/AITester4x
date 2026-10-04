@@ -1,0 +1,231 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e9]:
+    - link [ref=e11] [cursor=pointer]:
+      - /url: thetestingacademy.com
+      - img "TheTestingAcademy Logo" [ref=e12]
+    - generic [ref=e14]:
+      - list [ref=e15]:
+        - listitem [ref=e16]:
+          - link "Home" [ref=e17] [cursor=pointer]:
+            - /url: /
+        - listitem [ref=e22]:
+          - link "Our Reviews" [ref=e23] [cursor=pointer]:
+            - /url: https://love.thetestingacademy.com/all
+        - listitem [ref=e28]:
+          - link "Blog" [ref=e29] [cursor=pointer]:
+            - /url: https://scrolltest.com/
+        - listitem [ref=e34]:
+          - link "Contact" [ref=e35] [cursor=pointer]:
+            - /url: /contactus
+        - listitem [ref=e40]:
+          - link "Old ATB" [ref=e41] [cursor=pointer]:
+            - /url: https://legacy.thetestingacademy.com/
+      - list [ref=e46]:
+        - listitem [ref=e47]:
+          - link "Courses" [ref=e48] [cursor=pointer]:
+            - /url: https://courses.thetestingacademy.com/
+  - generic [ref=e57]:
+    - img "Pramod Dutta" [ref=e61]
+    - generic [ref=e63]:
+      - heading [level=3] [ref=e65]:
+        - strong [ref=e68]: Learn the Art of Software Testing & Upskill Yourself.
+      - generic [ref=e69]:
+        - paragraph [ref=e70]:
+          - generic [ref=e71]:
+            - text: On a
+            - strong [ref=e72]:
+              - insertion [ref=e73]: Misson to Help 10K Students
+            - text: to learn about the
+            - strong [ref=e74]: Software Testing and Test Automation.
+        - list [ref=e75]:
+          - listitem [ref=e76]:
+            - strong [ref=e78]: Fresher, Non IT, Manual Tester, Want to Switch to QA Role?
+          - listitem [ref=e79]:
+            - strong [ref=e81]: Manual Tester, Want to Move to Autoamtion? Join in.
+      - link [ref=e83] [cursor=pointer]:
+        - /url: https://courses.thetestingacademy.com/courses
+        - button "Explore All Course" [ref=e84]
+  - generic [ref=e87]:
+    - generic [ref=e92]:
+      - heading [level=3] [ref=e94]:
+        - generic [ref=e95]:
+          - text: Become
+          - strong [ref=e97]: Job Ready
+          - generic [ref=e98]:
+            - strong [ref=e99]: with
+            - text: Pramod Datta
+      - paragraph [ref=e101]:
+        - generic [ref=e102]:
+          - text: Learn in-demand
+          - strong [ref=e103]: Manual
+          - text: ", A"
+          - strong [ref=e104]: utomation testing skills.
+    - generic [ref=e109]:
+      - paragraph [ref=e112]:
+        - generic [ref=e113]:
+          - text: Download the
+          - strong [ref=e114]:
+            - insertion [ref=e115]: Exact ROADMAP Needed to become an MANUAL
+          - text: Tester & Automation Tester.
+      - link [ref=e117] [cursor=pointer]:
+        - /url: https://sdet.live/roadmaps
+        - button "Download the ROADMAPs" [ref=e118]
+  - generic [ref=e124]:
+    - img "Pramod Dutta" [ref=e128]
+    - generic [ref=e130]:
+      - link [ref=e132] [cursor=pointer]:
+        - /url: https://www.youtube.com/TheTestingAcademy
+      - heading "Pramod Dutta" [level=5] [ref=e136]
+      - paragraph [ref=e138]:
+        - generic [ref=e139]:
+          - text: CEO & Founder,
+          - strong [ref=e140]: TheTestingAcademy
+      - generic [ref=e141]:
+        - paragraph [ref=e142]:
+          - strong [ref=e144]: Meet your Instructor 👋
+        - list [ref=e145]:
+          - listitem [ref=e146]:
+            - generic [ref=e147]:
+              - text: Founder of The Testing Academy
+              - strong [ref=e148]:
+                - insertion [ref=e149]: 85K subscribers
+              - text: where Pramod teaches about Software testing & Test Automation.
+          - listitem [ref=e150]: With overall 10+ years of experience in Software Testing & Test Automation.
+          - listitem [ref=e151]:
+            - generic [ref=e152]:
+              - strong [ref=e153]: He has mentored
+              - strong [ref=e154]:
+                - insertion [ref=e155]: 5,000+ students in
+              - strong [ref=e156]: Software Testing, API Testing, Test Automation.
+          - listitem [ref=e157]: Pramod Dutta is working as SDET Manager at Tekion.
+          - listitem [ref=e158]:
+            - strong [ref=e160]: Ex BrowserStack Employee & BrowserStack Champion & Certified Scrum Master.
+          - listitem [ref=e161]:
+            - generic [ref=e162]:
+              - text: Pramod has a vast range of experience handling from
+              - strong [ref=e163]:
+                - insertion [ref=e164]: Manual Testing, Mobile & Web Automation, Desktop & cloud services like AWS, GCP extra.
+  - generic [ref=e165]:
+    - generic [ref=e170]:
+      - heading "Our Courses" [level=2] [ref=e172]
+      - paragraph [ref=e174]: I Teach Manual Testing, API Testing(Manual & Automation both), Automation Testing (with Java).
+    - generic [ref=e177]:
+      - generic [ref=e179]:
+        - img "[Live] Job Ready Automation Tester Blueprint with JAVA" [ref=e181]
+        - heading "Job Ready Automation Tester Blueprint with JAVA [Live]" [level=5] [ref=e183]
+        - generic [ref=e184]:
+          - paragraph [ref=e185]:
+            - generic [ref=e186]:
+              - text: Become an Automation Engineer/ SDET even as a Manual Tester with Real World Projects. In
+              - strong [ref=e187]: 4-5
+              - text: Months, Zero to Super Hero Automation Tester.
+          - paragraph
+        - link [ref=e189] [cursor=pointer]:
+          - /url: https://sdet.live/become
+          - button "Enroll Now" [ref=e190]
+      - generic [ref=e194]:
+        - img "Job Ready Software Tester Blueprint" [ref=e196]
+        - heading "Job Ready Software Tester Blueprint (LIVE)" [level=4] [ref=e198]
+        - generic [ref=e199]:
+          - paragraph [ref=e200]:
+            - generic [ref=e201]:
+              - text: Become a Job Ready Software Tester with JIRA,Scrum,Agile & Real Live Projects,API Testing Manually. In
+              - strong [ref=e202]: "2.5"
+              - text: Months (with SQL Masterclass, Mobile Testing)
+          - paragraph
+        - link [ref=e204] [cursor=pointer]:
+          - /url: https://sdet.live/manual
+          - button "Enroll Now" [ref=e205]
+      - generic [ref=e209]:
+        - img "API Automation with Postman & Rest Assured ( Core Java)" [ref=e211]
+        - heading "API Automation with Postman & Rest Assured ( Core Java)" [level=4] [ref=e213]
+        - paragraph [ref=e215]: Become an Expert in API Automation using Postman, REST Assured (+ Custom Framework, Maven, TestNG, BDD, Jenkins) in 2-3 Months. (Java, JS)
+        - link [ref=e217] [cursor=pointer]:
+          - /url: https://apitesting.co/blueprint
+          - button "Enroll Now" [ref=e218]
+  - link [ref=e228] [cursor=pointer]:
+    - /url: https://courses.thetestingacademy.com/courses
+    - button "Explore All Course" [ref=e229]
+  - generic [ref=e232]:
+    - generic [ref=e237]:
+      - heading [level=2] [ref=e239]:
+        - generic [ref=e241]:
+          - strong [ref=e242]: I Can Help you to Becme
+          - strong [ref=e243]: JOB READY QA !!
+      - paragraph [ref=e245]:
+        - generic [ref=e246]:
+          - text: Want to
+          - strong [ref=e247]:
+            - insertion [ref=e248]: Learn with LIVE Classes, Project Based Training with the Real LIVE Projects?
+    - generic [ref=e251]:
+      - generic [ref=e253]:
+        - heading "Live Classes with Recordings(Lifetime)" [level=5] [ref=e259]
+        - paragraph [ref=e261]: We conduct LIVE Classes that can help you to become Job READY
+      - generic [ref=e263]:
+        - heading "Live Doubt Solving(Interactions)" [level=5] [ref=e269]
+        - paragraph [ref=e271]: Project based Tranining, Which will help you to learn Fast and Solving every doubt.
+      - generic [ref=e273]:
+        - heading "Real LIVE Projects Based Training." [level=5] [ref=e279]
+        - paragraph [ref=e281]: We work with the LIVE Projects that are working in current market.
+  - link [ref=e289] [cursor=pointer]:
+    - /url: https://sdet.live/roadmaps
+    - button "Download the ROADMAPs" [ref=e290]
+  - generic [ref=e298]:
+    - 'heading "Reviews of Courses : What Other People are Saying..." [level=3] [ref=e300]'
+    - iframe [ref=e304]:
+      - main [ref=f1e2]:
+        - generic [ref=f1e4]:
+          - main [ref=f1e5]:
+            - generic [ref=f1e6]: Theatre mode Theatre mode Theatre mode Theatre mode Theatre mode Theatre mode Theatre mode Theatre mode Theatre mode Theatre mode Theatre mode Theatre mode
+          - link "Testimonial branding" [ref=f1e18] [cursor=pointer]:
+            - /url: https://testimonial.to?via=widgets
+            - img "Logo" [ref=f1e19]
+  - generic [ref=e305]:
+    - generic [ref=e308]:
+      - generic [ref=e310]:
+        - heading "TheTestingAcademy" [level=6] [ref=e312]
+        - list [ref=e313]:
+          - listitem [ref=e314]:
+            - link "Terms & conditions" [ref=e315] [cursor=pointer]:
+              - /url: /term
+          - listitem [ref=e317]:
+            - link "Privacy policy" [ref=e318] [cursor=pointer]:
+              - /url: /privacypolicy
+          - listitem [ref=e320]:
+            - link "Support" [ref=e321] [cursor=pointer]:
+              - /url: /contactus
+          - listitem [ref=e323]:
+            - link "Refund Policy" [ref=e324] [cursor=pointer]:
+              - /url: /refundpolicy
+          - listitem [ref=e326]:
+            - link "Shiiping" [ref=e327] [cursor=pointer]:
+              - /url: https://thetestingacademy.com/shipping
+      - generic [ref=e330]:
+        - heading "Services" [level=6] [ref=e332]
+        - list [ref=e333]:
+          - listitem [ref=e334]:
+            - link "Live Courses" [ref=e335] [cursor=pointer]:
+              - /url: /contactus
+          - listitem [ref=e337]:
+            - link "Software Testing Consuting" [ref=e338] [cursor=pointer]:
+              - /url: /contactus
+          - listitem [ref=e340]:
+            - link "Career Guide" [ref=e341] [cursor=pointer]:
+              - /url: /contactus
+      - generic [ref=e344]:
+        - heading "Get in touch" [level=6] [ref=e346]
+        - paragraph [ref=e353]: contact@thetestingacademy.com
+        - paragraph [ref=e360]: Uttam Nagar, NEW DELHI, 110059
+    - separator [ref=e367]
+    - generic [ref=e370]:
+      - paragraph [ref=e374]: ©2023 TheTestingAcademy, All right reserved.
+      - list [ref=e377]:
+        - listitem [ref=e378]:
+          - link [ref=e379] [cursor=pointer]:
+            - /url: https://facebook.com/techdutta
+        - listitem [ref=e382]:
+          - link [ref=e383] [cursor=pointer]:
+            - /url: https://twitter.com/itstechmode
+        - listitem [ref=e386]:
+          - link [ref=e387] [cursor=pointer]:
+            - /url: https://linkedin.com/in/pramoddutta
