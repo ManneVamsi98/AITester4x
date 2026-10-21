@@ -1,12 +1,50 @@
-Chapter_02_Prompt_Eng/RICE_POT_SeleniumAdvanceFramework/target/
-Chapter_02_Prompt_Eng/RICE_POT_SeleniumAdvanceFramework/src/test/resources/config.properties
-.commandcode
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+# Node / JavaScript
+node_modules/
+.next/
+.nuxt/
+
+# Java / Maven / Gradle
+target/
+*.class
+.gradle/
+
+# Local tooling, binaries and vector databases
+.tools/
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Playwright / test-run artifacts
+test-results/
+playwright-report/
+tta-report/
+playwright/.cache/
+
+# IDE and OS
+.idea/
+.DS_Store
+Thumbs.db
 
 # Credentials and local secrets - never commit these.
 .env
+.env.local
 config.json
+Chapter_02_Prompt_Eng/RICE_POT_SeleniumAdvanceFramework/src/test/resources/config.properties
 
-# Python
-__pycache__/
-*.pyc
-Chapter_04_Jobkit_AI/Resume_Helper/resume-tailor/scripts/node_modules/  
+# Command Code local state
+.commandcode
